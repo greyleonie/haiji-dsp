@@ -146,33 +146,44 @@ void __attribute__((__interrupt__)) _U2TXInterrupt (void)
 
 void Uart2Tx(void)
 {
-	if(MainState.UartTxOff == 1)
+	//判断系统是否处于等待UART发送结束的状态
+	if(MainState.UartTxOff == 1)	
 	{
-		if(U2STAbits.TRMT == 1)
+		//检查UART2发送结束标志是否置1
+		if(U2STAbits.TRMT == 1)		
 		{
-			MainState.UartTxOff = 0;
+			//系统退出等待UART发送结束的状态
+			MainState.UartTxOff = 0;	
 			
 		}
 	}else
 	{	
+		//系统处于未发送状态，检查UART数据发送是否开始
 		if(MainState.UartTxOn == 1)
 		{
+			//UART数据开始发送，数据发送结束检查标志置1
 			MainState.UartTxOff = 1;
+			//清除判断标志
 			MainState.UartTxOn = 0;
-			
+			//将数据写入UART发送寄存器
 			Uart2Parm.TxTimes = 0;
 			Uart2Parm.TxCurData = Uart2Parm.TxData[Uart2Parm.TxTimes];
 			U2TXREG = Uart2Parm.TxCurData;
 					
 		}else
 		{
+			//检查是否有数据需要通过UART发送
 			if(MainState.UartTx == 1)
 			{
+				//清空判断标志位
 			    MainState.UartTx = 0;
+				//通用端口F0置1
 				LATFbits.LATF0 = 1;
+				//开启UART数据发送
 				MainState.UartTxOn = 1;
 			}else
 			{
+				//通用端口F0置0
 				LATFbits.LATF0 = 0;
 			}
 		}
