@@ -54,7 +54,7 @@ void __attribute__((__interrupt__)) _U2RXInterrupt (void)
 		Uart2Parm.HighCRC = Uart2Parm.HighCRC + Uart2Parm.LowCRC;	
 		Uart2Parm.RxTimes = 0;
 		if(Uart2Parm.HighCRC == Uart2Parm.UartCRC)
-			MainState.UartRx = 1;
+			MainState.UartRx = 1;	//成功接收到读命令，需要发送响应数据
 	}else if(Uart2Parm.RxTimes == 20)
 	{
 		if(Uart2Parm.RxCurData == 0)
@@ -188,7 +188,7 @@ void Uart2Tx(void)
 			}
 		}
 	}
-	
+	//检查是否需要发送响应数据
 	if(MainState.UartRx == 1)
 	{
 		MainState.UartRx = 0;
