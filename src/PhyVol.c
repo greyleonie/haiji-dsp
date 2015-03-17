@@ -1,10 +1,10 @@
-//º£¼ª¿Æ¼¼£¬HJR3000ĞÍÖÇÄÜÈíÆô¶¯¿ØÖÆ×°ÖÃ£¬DSPIC30F6010AÏµÍ³
-//µçÑ¹Í¬²½ĞÅºÅ´¦Àí£¬PhyVol.c
+//æµ·å‰ç§‘æŠ€ï¼ŒHJR3000å‹æ™ºèƒ½è½¯å¯åŠ¨æ§åˆ¶è£…ç½®ï¼ŒDSPIC30F6010Aç³»ç»Ÿ
+//ç”µå‹åŒæ­¥ä¿¡å·å¤„ç†ï¼ŒPhyVol.c
 
-//Í·ÎÄ¼ş
-#include "UserParms.h"	//ÓÃ»§ÏµÍ³ÅäÖÃ£¬³£Êı¶¨Òå¼°ÅäÖÃÖµ
-#include "Function.h"	//ÏµÍ³Íâ²¿µ÷ÓÃº¯ÊıÉùÃ÷£¬ÄÚ²¿µ÷ÓÃº¯ÊıÔÚ¶ÔÓ¦ÎÄ¼şÄÚÉùÃ÷
-#include "variable.h"	//ÏµÍ³È«¾Ö±äÁ¿ÉùÃ÷£¬¾Ö²¿±äÁ¿ÔÚ¶ÔÓ¦ÎÄ¼şÄÚÉùÃ÷
+//å¤´æ–‡ä»¶
+#include "UserParms.h"	//ç”¨æˆ·ç³»ç»Ÿé…ç½®ï¼Œå¸¸æ•°å®šä¹‰åŠé…ç½®å€¼
+#include "Function.h"	//ç³»ç»Ÿå¤–éƒ¨è°ƒç”¨å‡½æ•°å£°æ˜ï¼Œå†…éƒ¨è°ƒç”¨å‡½æ•°åœ¨å¯¹åº”æ–‡ä»¶å†…å£°æ˜
+#include "variable.h"	//ç³»ç»Ÿå…¨å±€å˜é‡å£°æ˜ï¼Œå±€éƒ¨å˜é‡åœ¨å¯¹åº”æ–‡ä»¶å†…å£°æ˜
 
 int AX_int_IC = 0;
 
@@ -67,7 +67,7 @@ void __attribute__((__interrupt__)) _IC1Interrupt (void)
 	
 	ICParms.StartTimeIC1 = ICParms.EndTimeIC1;
 	
-	IFS0bits.IC1IF = 0;              //ÇåÁãÖĞ¶Ï±êÖ¾
+	IFS0bits.IC1IF = 0;              //æ¸…é›¶ä¸­æ–­æ ‡å¿—
 	return;
 }
 	
@@ -94,7 +94,7 @@ void __attribute__((__interrupt__)) _IC2Interrupt (void)
 	}
 	ICParms.StartTimeIC2 = ICParms.EndTimeIC2;
 	
-	IFS0bits.IC2IF = 0;              //ÇåÁãÖĞ¶Ï±êÖ¾
+	IFS0bits.IC2IF = 0;              //æ¸…é›¶ä¸­æ–­æ ‡å¿—
 	return;
 }
 
@@ -122,7 +122,7 @@ void __attribute__((__interrupt__)) _IC3Interrupt (void)
 	}
 	ICParms.StartTimeIC3 = ICParms.EndTimeIC3;
 	
-	IFS1bits.IC3IF = 0;              //ÇåÁãÖĞ¶Ï±êÖ¾
+	IFS1bits.IC3IF = 0;              //æ¸…é›¶ä¸­æ–­æ ‡å¿—
 	return;
 }
 
@@ -136,6 +136,6 @@ void __attribute__((__interrupt__)) _IC4Interrupt (void)
 	
 	
 	
-	IFS1bits.IC4IF = 0;              //ÇåÁãÖĞ¶Ï±êÖ¾
+	IFS1bits.IC4IF = 0;              //æ¸…é›¶ä¸­æ–­æ ‡å¿—
 	return;
 }

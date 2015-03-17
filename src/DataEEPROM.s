@@ -1,21 +1,21 @@
 /**********************************************************************
-* © 2005 Microchip Technology Inc.
+* Â© 2005 Microchip Technology Inc.
 *
 * FileName:        DataEEPROM.s
 * Dependencies:    Header (*.inc/.h) files if applicable, see below
 * Processor:       dsPIC30Fxxxx
-* Compiler:        MPLAB® C30 v1.32.00 or higher
-* IDE:             MPLAB® IDE v7.21 or later
+* Compiler:        MPLABÂ® C30 v1.32.00 or higher
+* IDE:             MPLABÂ® IDE v7.21 or later
 * Dev. Board Used: dsPICDEM 1.1 Development Board
 * Hardware Dependencies: None
 *
 * SOFTWARE LICENSE AGREEMENT:
-* Microchip Technology Inc. (“Microchip”) licenses this software to you
-* solely for use with Microchip dsPIC® digital signal controller
+* Microchip Technology Inc. (Â“MicrochipÂ”) licenses this software to you
+* solely for use with Microchip dsPICÂ® digital signal controller
 * products. The software is owned by Microchip and is protected under
 * applicable copyright laws.  All rights reserved.
 *
-* SOFTWARE IS PROVIDED “AS IS.”  MICROCHIP EXPRESSLY DISCLAIMS ANY
+* SOFTWARE IS PROVIDED Â“AS IS.Â”  MICROCHIP EXPRESSLY DISCLAIMS ANY
 * WARRANTY OF ANY KIND, WHETHER EXPRESS OR IMPLIED, INCLUDING BUT NOT
 * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
 * PARTICULAR PURPOSE, OR NON-INFRINGEMENT. IN NO EVENT SHALL MICROCHIP

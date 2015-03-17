@@ -1,5 +1,5 @@
-//º£¼ª¿Æ¼¼£¬HJR3000ĞÍÖÇÄÜÈíÆô¶¯¿ØÖÆ×°ÖÃ£¬DSPIC30F6010AÏµÍ³
-//ÏµÍ³È«¾Ö±äÁ¿ÉùÃ÷£¬¾Ö²¿±äÁ¿ÔÚ¶ÔÓ¦ÎÄ¼şÄÚÉùÃ÷  variable.h
+//æµ·å‰ç§‘æŠ€ï¼ŒHJR3000å‹æ™ºèƒ½è½¯å¯åŠ¨æ§åˆ¶è£…ç½®ï¼ŒDSPIC30F6010Aç³»ç»Ÿ
+//ç³»ç»Ÿå…¨å±€å˜é‡å£°æ˜ï¼Œå±€éƒ¨å˜é‡åœ¨å¯¹åº”æ–‡ä»¶å†…å£°æ˜  variable.h
 
 
 #ifndef variable_H
@@ -7,9 +7,9 @@
 
 #include <p30F6010A.h>
 
-//****************** ¶ÀÁ¢È«¾Ö±äÁ¿**********************
-extern unsigned int EEPROMADDR;		//µØÖ·¸ø¶¨ 
-extern unsigned int _EEDATA(128) EPConfigS[128];	//EEPROMÊı¾İ´æ´¢
+//****************** ç‹¬ç«‹å…¨å±€å˜é‡**********************
+extern unsigned int EEPROMADDR;		//åœ°å€ç»™å®š 
+extern unsigned int _EEDATA(128) EPConfigS[128];	//EEPROMæ•°æ®å­˜å‚¨
 extern unsigned int _EEDATA(16) EPEndErrorSave[16];
 extern unsigned int _EEDATA(16) EPErrorSaveState[16];
 extern unsigned int _EEDATA(16) EPErrorSaveMainMeau[16];
@@ -18,9 +18,9 @@ extern unsigned int _EEDATA(16) EPErrorSaveIUVW[16];
 extern unsigned int _EEDATA(16) EPErrorSaveUin[16];
 extern unsigned int Dsp_State_Start;
 
-//****************** ½á¹¹±äÁ¿**********************
+//****************** ç»“æ„å˜é‡**********************
 
-//¶¨Òå×´Ì¬Î»±êÊ¶
+//å®šä¹‰çŠ¶æ€ä½æ ‡è¯†
 typedef struct{
 	unsigned Run:1;
     unsigned AutoRun:1;
@@ -41,7 +41,7 @@ typedef struct{
 }tRunState;
 extern tRunState RunState;
 
-//¶¨Òå×´Ì¬Î»±êÊ¶
+//å®šä¹‰çŠ¶æ€ä½æ ‡è¯†
 typedef struct{
 	unsigned SoftStartEnd:1;
     unsigned SoftRunEnd:1;
@@ -63,7 +63,7 @@ typedef struct{
 extern tStartState StartState;
  
 
-//¶¨Òå×´Ì¬Î»±êÊ¶
+//å®šä¹‰çŠ¶æ€ä½æ ‡è¯†
 typedef struct{
 	unsigned UoutH:1;
     unsigned VoutH:1;
@@ -84,7 +84,7 @@ typedef struct{
 }tPwmState;
 extern tPwmState PwmState; 
 
-//¶¨Òå×´Ì¬Î»±êÊ¶
+//å®šä¹‰çŠ¶æ€ä½æ ‡è¯†
 typedef struct{
 	unsigned Cur:1;
     unsigned I2CTrn:1;
@@ -107,7 +107,7 @@ typedef struct{
 extern tMainState MainState; 
 
 
-//¶¨Òå×´Ì¬Î»±êÊ¶
+//å®šä¹‰çŠ¶æ€ä½æ ‡è¯†
 typedef struct{
 	unsigned Phy:1;
     unsigned :1;
@@ -130,7 +130,7 @@ typedef struct{
 extern tSysTestState SysTestState; 
 
 
-//¶¨Òå×´Ì¬Î»±êÊ¶
+//å®šä¹‰çŠ¶æ€ä½æ ‡è¯†
 typedef struct{
 	unsigned UartTx:1;
 	unsigned UartTxOff:1;
@@ -152,7 +152,7 @@ typedef struct{
 }tUart1State;
 extern tUart1State Uart1State; 
 
-//¶¨Òå¹ÊÕÏ×´Ì¬Î»±êÊ¶
+//å®šä¹‰æ•…éšœçŠ¶æ€ä½æ ‡è¯†
 typedef struct {
     unsigned FLTA_Error:1;
     unsigned ImbalanceCar_Error:1;
@@ -173,7 +173,7 @@ typedef struct {
 } tErrorState;
 extern tErrorState ErrorState;
 
-//¶¨ÒåIO¿ÚÊäÈë±êÊ¶
+//å®šä¹‰IOå£è¾“å…¥æ ‡è¯†
 typedef struct{
 	unsigned  ImRun:1;
 	unsigned  ImStop:1;
@@ -194,7 +194,7 @@ typedef struct{
 }tInputState;
 extern tInputState InputState;
 
-//¶¨ÒåIO¿ÚÊäÈë±êÊ¶
+//å®šä¹‰IOå£è¾“å…¥æ ‡è¯†
 typedef struct{
 	unsigned  Men:1;
 	unsigned  Stop:1;
@@ -215,7 +215,7 @@ typedef struct{
 }tInsideIOState;
 extern tInsideIOState InsideIOState;
 
-//¶¨ÒåIO¿ÚÊä³ö±êÊ¶
+//å®šä¹‰IOå£è¾“å‡ºæ ‡è¯†
 typedef struct{
 	unsigned  Error:1;
 	unsigned  OverHigh:1;
@@ -238,7 +238,7 @@ extern tOutputState OutputState;
 
 
 
-//¶¨ÒåIO¿ÚÊäÈë×´Ì¬±êÊ¶
+//å®šä¹‰IOå£è¾“å…¥çŠ¶æ€æ ‡è¯†
 typedef struct{
 	unsigned  In1:1;
 	unsigned  In2:1;
@@ -260,7 +260,7 @@ typedef struct{
 }tInputIO;
 extern tInputIO InputIO;
 
-//¶¨ÒåIO¿ÚÊä³ö×´Ì¬±êÊ¶
+//å®šä¹‰IOå£è¾“å‡ºçŠ¶æ€æ ‡è¯†
 typedef struct{
 	unsigned  OU1:1;
 	unsigned  OU2:1;
@@ -282,7 +282,7 @@ typedef struct{
 }tOutputIO;
 extern tOutputIO OutputIO;
 
-//¶¨ÒåIO¿ÚÊäÈë×´Ì¬Âß¼­±ä»»±êÊ¶
+//å®šä¹‰IOå£è¾“å…¥çŠ¶æ€é€»è¾‘å˜æ¢æ ‡è¯†
 typedef struct{
 	unsigned  In1:1;
 	unsigned  In2:1;
@@ -341,7 +341,7 @@ typedef struct {
 }tErrorParm;
 extern tErrorParm ErrorParm;  
 
-//¶¨Òå¼üÅÌ¸ø¶¨²ÎÊı
+//å®šä¹‰é”®ç›˜ç»™å®šå‚æ•°
 typedef struct {
     unsigned int In1;
     unsigned int In2;
@@ -375,7 +375,7 @@ typedef struct {
 }tKeyParm;
 extern tKeyParm KeyParm;  
 
-//¶¨Òå¼ì²â²ÎÊı
+//å®šä¹‰æ£€æµ‹å‚æ•°
 typedef struct {
     int MainMeauMax;
     int MainMeauFine;
@@ -411,7 +411,7 @@ typedef struct {
 }tMeauParm;
 extern tMeauParm MeauParm;  
 
-//¶¨Òå×Ô¶¯ÔËĞĞ²ÎÊı
+//å®šä¹‰è‡ªåŠ¨è¿è¡Œå‚æ•°
 typedef struct {
     unsigned int FillGas;
     unsigned int FillOil;
@@ -446,7 +446,7 @@ typedef struct {
 extern tAutoRunParm AutoRunParm;  
 
 
-//¶¨ÒåSinCos²é±í²ÎÊı
+//å®šä¹‰SinCosæŸ¥è¡¨å‚æ•°
 typedef struct {
 	short	qAngle;
     short	qSin;
@@ -455,7 +455,7 @@ typedef struct {
     } tSinCosParms;   
 extern tSinCosParms SinCosParms;
 
-//¶¨ÒåPWMÊä³ö²ÎÊı
+//å®šä¹‰PWMè¾“å‡ºå‚æ•°
 typedef struct{
 	int Duty1H;
 	int Duty2H;
@@ -469,14 +469,14 @@ typedef struct{
 	int Delay1L;
 	int Delay2L;
 	int Delay3L;
-	int FLTA_Js;				//FLTAÖĞ¶Ï£¨PWM¹ÊÕÏ£©³¢ÊÔÇå³ı¼ÆÊıÆ÷£¬
+	int FLTA_Js;				//FLTAä¸­æ–­ï¼ˆPWMæ•…éšœï¼‰å°è¯•æ¸…é™¤è®¡æ•°å™¨ï¼Œ
 	int OnPWM;
 	unsigned int StartOut;
 }tPWMParams;
 extern tPWMParams PWMParams;
 
 
-//¶¨ÒåµçÁ÷¼ì²â²ÎÊı
+//å®šä¹‰ç”µæµæ£€æµ‹å‚æ•°
 typedef struct{
     short IU;
     short PeakIU;

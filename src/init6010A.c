@@ -1,17 +1,17 @@
-//º£¼ª¿Æ¼¼£¬HJR3000ĞÍÖÇÄÜÈíÆô¶¯¿ØÖÆ×°ÖÃ£¬DSPIC30F6010AÏµÍ³
-//ÏµÍ³³õÊ¼»¯º¯Êı£¬init4011.c
+//æµ·å‰ç§‘æŠ€ï¼ŒHJR3000å‹æ™ºèƒ½è½¯å¯åŠ¨æ§åˆ¶è£…ç½®ï¼ŒDSPIC30F6010Aç³»ç»Ÿ
+//ç³»ç»Ÿåˆå§‹åŒ–å‡½æ•°ï¼Œinit4011.c
 
-//Í·ÎÄ¼ş
-#include "UserParms.h"	//ÓÃ»§ÏµÍ³ÅäÖÃ£¬³£Êı¶¨Òå¼°ÅäÖÃÖµ
-#include "Function.h"	//ÏµÍ³Íâ²¿µ÷ÓÃº¯ÊıÉùÃ÷£¬ÄÚ²¿µ÷ÓÃº¯ÊıÔÚ¶ÔÓ¦ÎÄ¼şÄÚÉùÃ÷
-#include "variable.h"	//ÏµÍ³È«¾Ö±äÁ¿ÉùÃ÷£¬¾Ö²¿±äÁ¿ÔÚ¶ÔÓ¦ÎÄ¼şÄÚÉùÃ÷
+//å¤´æ–‡ä»¶
+#include "UserParms.h"	//ç”¨æˆ·ç³»ç»Ÿé…ç½®ï¼Œå¸¸æ•°å®šä¹‰åŠé…ç½®å€¼
+#include "Function.h"	//ç³»ç»Ÿå¤–éƒ¨è°ƒç”¨å‡½æ•°å£°æ˜ï¼Œå†…éƒ¨è°ƒç”¨å‡½æ•°åœ¨å¯¹åº”æ–‡ä»¶å†…å£°æ˜
+#include "variable.h"	//ç³»ç»Ÿå…¨å±€å˜é‡å£°æ˜ï¼Œå±€éƒ¨å˜é‡åœ¨å¯¹åº”æ–‡ä»¶å†…å£°æ˜
 
 int AX_int_Init = 0;
 
-//¶ÁEEP£¬ÅäÖÃÏµÍ³²ÎÊı
+//è¯»EEPï¼Œé…ç½®ç³»ç»Ÿå‚æ•°
 void SysConfig(void)
 {
-	//¶Á´®¿Ú²¨ÌØÂÊµ¥Ôª£¬KeyParm.SaveParms[0x1B]
+	//è¯»ä¸²å£æ³¢ç‰¹ç‡å•å…ƒï¼ŒKeyParm.SaveParms[0x1B]
 	EEPROMADDR = 0xF000+2*0x1B;
   	ReadEE(__builtin_tblpage(&EPConfigS[0]),EEPROMADDR,&KeyParm.SaveParms[0x1B], WORD);
 	
@@ -47,7 +47,7 @@ void StateInit(void)
 {
 	unsigned int i = 0;
 	
-	//************* ¶ÁÔËĞĞ²ÎÊı ******************
+	//************* è¯»è¿è¡Œå‚æ•° ******************
 	for(i = 0; i < 128; i ++)
     {
     	EEPROMADDR = 0xF000 + 2 * i;
@@ -76,8 +76,8 @@ void StateInit(void)
 
 	}
 	
-//************* ¼ÆËã²ÎÊıÖµ ******************
-	//¿É±à³ÌIOÊäÈë
+//************* è®¡ç®—å‚æ•°å€¼ ******************
+	//å¯ç¼–ç¨‹IOè¾“å…¥
 	if(KeyParm.SaveParms[0x40]>18)
 		KeyParm.SaveParms[0x40]=18;
 	else if(KeyParm.SaveParms[0x40]<0)
@@ -129,7 +129,7 @@ void StateInit(void)
 	KeyParm.InLogic=KeyParm.SaveParms[0x48];
 	
 	
-	//¿É±à³ÌIOÊä³ö
+	//å¯ç¼–ç¨‹IOè¾“å‡º
 	if(KeyParm.SaveParms[0x50]>21)
 		KeyParm.SaveParms[0x50]=21;
 	else if(KeyParm.SaveParms[0x50]<0)
@@ -195,35 +195,35 @@ void StateInit(void)
 	KeyParm.OutLogic = KeyParm.OutLogic - 1;
 	
 	
-	//¿ØÖÆÄ£Ê½
+	//æ§åˆ¶æ¨¡å¼
 	if(KeyParm.SaveParms[0x10]>1)
 		KeyParm.SaveParms[0x10]=0;
 	else if(KeyParm.SaveParms[0x10]<0)
 		KeyParm.SaveParms[0x10]=0;
 	KeyParm.CtrMode=KeyParm.SaveParms[0x10];
 	
-	//Æô¶¯Ä£Ê½
+	//å¯åŠ¨æ¨¡å¼
 	if(KeyParm.SaveParms[0x11]>3)
 		KeyParm.SaveParms[0x11]=0;
 	else if(KeyParm.SaveParms[0x11]<0)
 		KeyParm.SaveParms[0x11]=0;
 	KeyParm.StartMode=KeyParm.SaveParms[0x11];
 
-	//Í£Ö¹Ä£Ê½
+	//åœæ­¢æ¨¡å¼
 	if(KeyParm.SaveParms[0x12]>2)
 		KeyParm.SaveParms[0x12]=0;
 	else if(KeyParm.SaveParms[0x12]<0)
 		KeyParm.SaveParms[0x12]=0;
 	KeyParm.StopMode=KeyParm.SaveParms[0x12];
 	
-	//ÔËĞĞ·½Ê½
+	//è¿è¡Œæ–¹å¼
 	if(KeyParm.SaveParms[0x13]>1)
 		KeyParm.SaveParms[0x13]=0;
 	else if(KeyParm.SaveParms[0x13]<0)
 		KeyParm.SaveParms[0x13]=0;
 	KeyParm.RunMode=KeyParm.SaveParms[0x13];
 	
-	//²âÁ¿Á¿³Ì
+	//æµ‹é‡é‡ç¨‹
 	if(KeyParm.SaveParms[0x14]>19999)
 		KeyParm.SaveParms[0x14]=0;
 	else if(KeyParm.SaveParms[0x14]<0)
@@ -233,7 +233,7 @@ void StateInit(void)
 	MeauParm.MainMul = 1121;
 	MeauParm.MainAdd = 99614;
 	
-	//²âÁ¿Õû¶¨
+	//æµ‹é‡æ•´å®š
 	if(KeyParm.SaveParms[0x15]>19999)
 		KeyParm.SaveParms[0x15]=10000;
 	else if(KeyParm.SaveParms[0x15]<0)
@@ -242,35 +242,35 @@ void StateInit(void)
 		MeauParm.MainMeauFine=KeyParm.SaveParms[0x15];
 	else MeauParm.MainMeauFine = 10000 - KeyParm.SaveParms[0x15];
 	
-	//µçÑ¹Õû¶¨
+	//ç”µå‹æ•´å®š
 	if(KeyParm.SaveParms[0x17] < 0)
 		KeyParm.SaveParms[0x17] = 4000;
 	else if(KeyParm.SaveParms[0x17] > 19999)
 		KeyParm.SaveParms[0x17] = 4000;	
 	SysParms.MaxMeauVol = KeyParm.SaveParms[0x17];
 	
-	//µçÁ÷Õû¶¨
+	//ç”µæµæ•´å®š
 	if(KeyParm.SaveParms[0x18] < 0)
 		KeyParm.SaveParms[0x18] = 3000;
 	else if(KeyParm.SaveParms[0x18] > 29999)
 		KeyParm.SaveParms[0x18] = 3000;	
 	SysParms.MaxMeauCur = KeyParm.SaveParms[0x18];
 	
-	//µçÑ¹ĞŞÕı
+	//ç”µå‹ä¿®æ­£
 	if(KeyParm.SaveParms[0x19] < 0)
 		KeyParm.SaveParms[0x19] = 3000;
 	else if(KeyParm.SaveParms[0x19] > 19999)
 		KeyParm.SaveParms[0x19] = 3000;	
 	SysParms.AddMeauVol = KeyParm.SaveParms[0x19];
 	
-	//´®¿ÚµØÖ·
+	//ä¸²å£åœ°å€
 	if(KeyParm.SaveParms[0x1A]>255)
 		KeyParm.SaveParms[0x1A]=1;
 	else if(KeyParm.SaveParms[0x1A]<0)
 		KeyParm.SaveParms[0x1A]=1;
 	Uart2Parm.Addr = KeyParm.SaveParms[0x1A];											
 
-	//¹¦ÄÜ²ÎÊı
+	//åŠŸèƒ½å‚æ•°
 	if(KeyParm.SaveParms[0X60] < 10)
 		KeyParm.SaveParms[0X60] = 300;
 	else if(KeyParm.SaveParms[0X60] > 10000)
@@ -368,7 +368,7 @@ void StateInit(void)
 		KeyParm.SaveParms[0X6e] = 160;
 	KeyParm.BackupMeauLow = KeyParm.SaveParms[0X6e];
 
-	//µç»ú±£»¤²ÎÊı
+	//ç”µæœºä¿æŠ¤å‚æ•°
 	if(KeyParm.SaveParms[0x20] < 1)
 		KeyParm.SaveParms[0x20] = 1;
 	else if(KeyParm.SaveParms[0x20] > 999)
@@ -461,19 +461,19 @@ void StateInit(void)
 	ErrorParm.PassError = - ErrorParm.PassError;
 	ErrorParm.PassError = ErrorParm.PassError - 1;
 	
-	//ÆğÍ£²ÎÊı
+	//èµ·åœå‚æ•°
 	if(KeyParm.SaveParms[0x30] < 10)
 		KeyParm.SaveParms[0x30] = 30;
 	else if(KeyParm.SaveParms[0x30] > 80)
 		KeyParm.SaveParms[0x30] = 30;
 	AX_int_Init = 100 - KeyParm.SaveParms[0x30];
-	SoftRunParms.StartData = ( (long) DataMax  / 100 ) * AX_int_Init;				//µçÑ¹Ğ±ÆÂÆô¶¯³õÊ¼µçÑ¹
+	SoftRunParms.StartData = ( (long) DataMax  / 100 ) * AX_int_Init;				//ç”µå‹æ–œå¡å¯åŠ¨åˆå§‹ç”µå‹
 	
 	if(KeyParm.SaveParms[0x31] < 1)
 		KeyParm.SaveParms[0x31] = 100;
 	else if(KeyParm.SaveParms[0x31] > 9999)
 		KeyParm.SaveParms[0x31] = 100;
-	SoftRunParms.LoopData = DataMaxLoop / KeyParm.SaveParms[0x31];					//µçÑ¹Ğ±ÆÂÆô¶¯²½³¤
+	SoftRunParms.LoopData = DataMaxLoop / KeyParm.SaveParms[0x31];					//ç”µå‹æ–œå¡å¯åŠ¨æ­¥é•¿
 	
 		
 	if(KeyParm.SaveParms[0x32] < 10)
@@ -481,40 +481,40 @@ void StateInit(void)
 	else if(KeyParm.SaveParms[0x32] > 80)
 		KeyParm.SaveParms[0x32] = 40;
 	AX_int_Init = 100 - KeyParm.SaveParms[0x32];
-	SoftRunParms.JumpStartData = ( (long) DataMax  / 100 ) * AX_int_Init;			//Í»ÌøÁ¦¾ØÆô¶¯µçÑ¹	
+	SoftRunParms.JumpStartData = ( (long) DataMax  / 100 ) * AX_int_Init;			//çªè·³åŠ›çŸ©å¯åŠ¨ç”µå‹	
 	
 	if(KeyParm.SaveParms[0x33] < 1)
 		KeyParm.SaveParms[0x33] = 5;
 	else if(KeyParm.SaveParms[0x33] > 100)
 		KeyParm.SaveParms[0x33] = 5;
-	SoftRunParms.JumpLoopData = ( (long) KeyParm.SaveParms[0x33] * 1000 ) / 25;		//Í»ÌøÁ¦¾ØÆô¶¯²½³¤
+	SoftRunParms.JumpLoopData = ( (long) KeyParm.SaveParms[0x33] * 1000 ) / 25;		//çªè·³åŠ›çŸ©å¯åŠ¨æ­¥é•¿
 	
 	if(KeyParm.SaveParms[0x34] < 100)
 		KeyParm.SaveParms[0x34] = 200;
 	else if(KeyParm.SaveParms[0x34] > 500)
 		KeyParm.SaveParms[0x34] = 200;
-	SoftRunParms.LimitCar = ( (long) SysParms.RateCur * KeyParm.SaveParms[0x34] ) / 100;	//ÏŞÁ÷Æô¶¯ÏŞÁ÷µçÁ÷
+	SoftRunParms.LimitCar = ( (long) SysParms.RateCur * KeyParm.SaveParms[0x34] ) / 100;	//é™æµå¯åŠ¨é™æµç”µæµ
 	
 	if(KeyParm.SaveParms[0x35] < 60)
 		KeyParm.SaveParms[0x35] = 85;
 	else if(KeyParm.SaveParms[0x35] > 100)
 		KeyParm.SaveParms[0x35] = 85;
 	AX_int_Init = 100 - KeyParm.SaveParms[0x35];
-	SoftRunParms.EndData = ( (long) DataMax  / 100 ) * AX_int_Init;					//Æô¶¯ÏŞÖÆµçÑ¹
+	SoftRunParms.EndData = ( (long) DataMax  / 100 ) * AX_int_Init;					//å¯åŠ¨é™åˆ¶ç”µå‹
 	
 	if(KeyParm.SaveParms[0x36] < 10)
 		KeyParm.SaveParms[0x36] = 40;
 	else if(KeyParm.SaveParms[0x36] > 100)
 		KeyParm.SaveParms[0x36] = 40;
 	AX_int_Init = 100 - KeyParm.SaveParms[0x36];
-	SoftRunParms.SoftStopStartData = ( (long) DataMax  / 100 ) * AX_int_Init;		//ÈíÍ£»ú³õÊ¼µçÑ¹
+	SoftRunParms.SoftStopStartData = ( (long) DataMax  / 100 ) * AX_int_Init;		//è½¯åœæœºåˆå§‹ç”µå‹
 	SoftRunParms.SoftStopEndData = ( (long) DataMax  / 100 ) * 70;
 	
 	if(KeyParm.SaveParms[0x37] < 1)
 		KeyParm.SaveParms[0x37] = 10;
 	else if(KeyParm.SaveParms[0x37] > 999)
 		KeyParm.SaveParms[0x37] = 10;
-	SoftRunParms.SoftStopLoopData = DataMaxLoop / KeyParm.SaveParms[0x37];			//ÈíÍ£»ú²½³¤
+	SoftRunParms.SoftStopLoopData = DataMaxLoop / KeyParm.SaveParms[0x37];			//è½¯åœæœºæ­¥é•¿
 		
 	if(KeyParm.SaveParms[0x38] < 10)
 		KeyParm.SaveParms[0x38] = 50;
@@ -522,16 +522,16 @@ void StateInit(void)
 		KeyParm.SaveParms[0x38] = 50;
 	AX_int_Init = 100 - KeyParm.SaveParms[0x38];
 	SoftRunParms.StopEndData = ( (long) DataMax  / 100 ) * AX_int_Init;
-	SoftRunParms.StopEndData = SoftRunParms.StopEndData / dqDataGei;				//É²³µµçÑ¹
+	SoftRunParms.StopEndData = SoftRunParms.StopEndData / dqDataGei;				//åˆ¹è½¦ç”µå‹
 	
 		
 	if(KeyParm.SaveParms[0x39] < 1)
 		KeyParm.SaveParms[0x39] = 3;
 	else if(KeyParm.SaveParms[0x39] > 999)
 		KeyParm.SaveParms[0x39] = 3;
-	SoftRunParms.StopLoopData = DataMaxLoop / KeyParm.SaveParms[0x39];				//É²³µÍ£Ö¹²½³¤
+	SoftRunParms.StopLoopData = DataMaxLoop / KeyParm.SaveParms[0x39];				//åˆ¹è½¦åœæ­¢æ­¥é•¿
 	
-	//×Ô¶¯ÔËĞĞ²ÎÊı
+	//è‡ªåŠ¨è¿è¡Œå‚æ•°
 	if(KeyParm.SaveParms[0x00]>19999)
 		KeyParm.SaveParms[0x00]=220;
 	else if(KeyParm.SaveParms[0x00]<0)
@@ -684,7 +684,7 @@ void StateInit(void)
 	AutoRunParm.RunParm[7] = AutoRunParm.Backup7;
 	
 	
-	// **************** ±äÁ¿¸³³õÖµ ************************
+	// **************** å˜é‡èµ‹åˆå€¼ ************************
 	PWMParams.StartOut = 0;
 	PwmState.StartOut = 0;
 	PwmState.UoutPhyH = 0;
@@ -815,30 +815,30 @@ void StateInit(void)
     Uart1Parm.RunNumber = 0;
     AutoRunParm.RunNumber = Uart1Parm.Addr - Uart1Parm.RunNumber;
     
-    //Æô¶¯ÏµÍ³¹¦ÄÜµ¥Ôª
+    //å¯åŠ¨ç³»ç»ŸåŠŸèƒ½å•å…ƒ
 	T1CONbits.TON = 1;              // start the timer1
-    ADCON1bits.ADON=1;				//¿ªAD×ª»»
-    IEC0bits.IC1IE = 1;				//ÔÊĞíIC1ÖĞ¶Ï
-    IEC0bits.IC2IE = 1;             //ÔÊĞíIC2ÖĞ¶Ï
-	IEC1bits.IC3IE = 1;             //ÔÊĞíIC3ÖĞ¶Ï  
-	IEC1bits.IC4IE = 1;             //ÔÊĞíIC4ÖĞ¶Ï  
-	IEC2bits.PWMIE = 1;  			// Ê¹ÄÜPWMÖĞ¶Ï
-	IEC0bits.SI2CIE = 1;			// 1 ÔÊĞíSI2CÖĞ¶Ï  
-	IEC1bits.U2TXIE = 1;			// 1 ÔÊĞíU2TXÖĞ¶Ï 
-	IEC1bits.U2RXIE = 1;			// 1 ÔÊĞíU2RXÖĞ¶Ï 
-	IEC0bits.U1TXIE = 1;			// 1 ÔÊĞíU2TXÖĞ¶Ï 
-	IEC0bits.U1RXIE = 1;			// 1 ÔÊĞíU2RXÖĞ¶Ï   
+    ADCON1bits.ADON=1;				//å¼€ADè½¬æ¢
+    IEC0bits.IC1IE = 1;				//å…è®¸IC1ä¸­æ–­
+    IEC0bits.IC2IE = 1;             //å…è®¸IC2ä¸­æ–­
+	IEC1bits.IC3IE = 1;             //å…è®¸IC3ä¸­æ–­  
+	IEC1bits.IC4IE = 1;             //å…è®¸IC4ä¸­æ–­  
+	IEC2bits.PWMIE = 1;  			// ä½¿èƒ½PWMä¸­æ–­
+	IEC0bits.SI2CIE = 1;			// 1 å…è®¸SI2Cä¸­æ–­  
+	IEC1bits.U2TXIE = 1;			// 1 å…è®¸U2TXä¸­æ–­ 
+	IEC1bits.U2RXIE = 1;			// 1 å…è®¸U2RXä¸­æ–­ 
+	IEC0bits.U1TXIE = 1;			// 1 å…è®¸U2TXä¸­æ–­ 
+	IEC0bits.U1RXIE = 1;			// 1 å…è®¸U2RXä¸­æ–­   
 	
 	
 	if(Uart1Parm.AddrMax == 8)
 	{
-		IEC0bits.U1TXIE = 0;			// 1 ÔÊĞíU2TXÖĞ¶Ï 
-		IEC0bits.U1RXIE = 0;			// 1 ÔÊĞíU2RXÖĞ¶Ï   
+		IEC0bits.U1TXIE = 0;			// 1 å…è®¸U2TXä¸­æ–­ 
+		IEC0bits.U1RXIE = 0;			// 1 å…è®¸U2RXä¸­æ–­   
 	}
 }
 
 
-//IO¿Ú¹¦ÄÜ³õÊ¼»¯
+//IOå£åŠŸèƒ½åˆå§‹åŒ–
 void SetupPorts( void )
 {
 // ============= Port A ==============
@@ -871,23 +871,23 @@ void SetupPorts( void )
 
 // RB0    PGD/EMUD/AN0/CN2			PGD
 // RB1    PGC/EMUC/AN1/CN3			PGC
-// RB2    AN2/SS1/CN4     			IN1-RB2		¿É±à³ÌÊäÈë½Ó¿Ú1
-// RB3    AN3/INDX/CN5				IN2-RB3 	¿É±à³ÌÊäÈë½Ó¿Ú2
+// RB2    AN2/SS1/CN4     			IN1-RB2		å¯ç¼–ç¨‹è¾“å…¥æ¥å£1
+// RB3    AN3/INDX/CN5				IN2-RB3 	å¯ç¼–ç¨‹è¾“å…¥æ¥å£2
 
-// RB4    AN4/QEA/CN6				IN3-RB4 	¿É±à³ÌÊäÈë½Ó¿Ú3  
-// RB5    AN5/QEB/CN7				IN4-RB5 	¿É±à³ÌÊäÈë½Ó¿Ú4  
-// RB6    AN6/OCFA					IN5-RB6 	¿É±à³ÌÊäÈë½Ó¿Ú5  
-// RB7    AN7						IN6-RB7 	¿É±à³ÌÊäÈë½Ó¿Ú6  
+// RB4    AN4/QEA/CN6				IN3-RB4 	å¯ç¼–ç¨‹è¾“å…¥æ¥å£3  
+// RB5    AN5/QEB/CN7				IN4-RB5 	å¯ç¼–ç¨‹è¾“å…¥æ¥å£4  
+// RB6    AN6/OCFA					IN5-RB6 	å¯ç¼–ç¨‹è¾“å…¥æ¥å£5  
+// RB7    AN7						IN6-RB7 	å¯ç¼–ç¨‹è¾“å…¥æ¥å£6  
 
-// RB8    AN8						IN7-RB8 	¿É±à³ÌÊäÈë½Ó¿Ú7  
-// RB9    AN9						IN8-RB9 	¿É±à³ÌÊäÈë½Ó¿Ú8  
-// RB10   AN10						YF-AN10 	±¸ÓÃ²âÁ¿ÊäÈë
-// RB11   AN11						PF-AN11 	Ö÷²âÁ¿ÊäÈë
+// RB8    AN8						IN7-RB8 	å¯ç¼–ç¨‹è¾“å…¥æ¥å£7  
+// RB9    AN9						IN8-RB9 	å¯ç¼–ç¨‹è¾“å…¥æ¥å£8  
+// RB10   AN10						YF-AN10 	å¤‡ç”¨æµ‹é‡è¾“å…¥
+// RB11   AN11						PF-AN11 	ä¸»æµ‹é‡è¾“å…¥
 
-// RB12   AN12						UF-AN12 	ÊäÈëµçÑ¹
-// RB13   AN13						UIF-AN13 	UÏàµçÁ÷
-// RB14   AN14						UIF-AN14 	VÏàµçÁ÷
-// RB15   AN15						UIF-AN15 	WÏàµçÁ÷
+// RB12   AN12						UF-AN12 	è¾“å…¥ç”µå‹
+// RB13   AN13						UIF-AN13 	Uç›¸ç”µæµ
+// RB14   AN14						UIF-AN14 	Vç›¸ç”µæµ
+// RB15   AN15						UIF-AN15 	Wç›¸ç”µæµ
 
     TRISB = 0xFFFF; 
     LATB  = 0XFFFF;
@@ -895,9 +895,9 @@ void SetupPorts( void )
 // ============= Port C ==============
 
 //        absent
-// RC1	  T2CK						GR-RC1		¹ıÈÈ±£»¤
+// RC1	  T2CK						GR-RC1		è¿‡çƒ­ä¿æŠ¤
 //        absent
-// RC3	  T4CK						PLIN-RC3	ÅÔÂ·½Ó´¥Æ÷±ÕºÏ¼ì²â
+// RC3	  T4CK						PLIN-RC3	æ—è·¯æ¥è§¦å™¨é—­åˆæ£€æµ‹
 
 //        absent
 //        absent
@@ -910,34 +910,34 @@ void SetupPorts( void )
 //        absent
 
 //        absent
-// RC13   EMUD1/SOSCI				OU0-RD0			ÅÔÂ·½Ó´¥Æ÷Êä³ö
-// RC14   EMUC1/SOSCO/T1CK/CN0		OU1-RD1			¿É±à³ÌÊä³ö1	
-// RC15   OSC2/CLKO                 	OSC2		¾§Õñ
+// RC13   EMUD1/SOSCI				OU0-RD0			æ—è·¯æ¥è§¦å™¨è¾“å‡º
+// RC14   EMUC1/SOSCO/T1CK/CN0		OU1-RD1			å¯ç¼–ç¨‹è¾“å‡º1	
+// RC15   OSC2/CLKO                 	OSC2		æ™¶æŒ¯
 
     TRISC = 0x1FFF;     
     LATC  = 0XFFFF;
 
 // ============= Port D ==============
 
-// RD0    EMUC2/OC1				OU20mA1			4-20mAÊä³ö1	
-// RD1    EMUD2/OC2				OU20mA1			4-20mAÊä³ö2	
-// RD2    OC3                   OU2-RD2			¿É±à³ÌÊä³ö2	
-// RD3    OC4                   OU3-RD3			¿É±à³ÌÊä³ö3	
+// RD0    EMUC2/OC1				OU20mA1			4-20mAè¾“å‡º1	
+// RD1    EMUD2/OC2				OU20mA1			4-20mAè¾“å‡º2	
+// RD2    OC3                   OU2-RD2			å¯ç¼–ç¨‹è¾“å‡º2	
+// RD3    OC4                   OU3-RD3			å¯ç¼–ç¨‹è¾“å‡º3	
 
-// RD4    OC5/CN13              OU4-RD4			¿É±à³ÌÊä³ö4	
-// RD5    OC6/CN14              OU5-RD5			¿É±à³ÌÊä³ö5
-// RD6    OC7/CN15              OU6-RD6			¿É±à³ÌÊä³ö6
-// RD7    OC8/CN16/UPDN         OU7-RD7			¿É±à³ÌÊä³ö7
+// RD4    OC5/CN13              OU4-RD4			å¯ç¼–ç¨‹è¾“å‡º4	
+// RD5    OC6/CN14              OU5-RD5			å¯ç¼–ç¨‹è¾“å‡º5
+// RD6    OC7/CN15              OU6-RD6			å¯ç¼–ç¨‹è¾“å‡º6
+// RD7    OC8/CN16/UPDN         OU7-RD7			å¯ç¼–ç¨‹è¾“å‡º7
 
-// RD8    IC1					UAIN-IC1		AÏàµçÑ¹Í¬²½
-// RD9    IC2					UBIN-IC2		BÏàµçÑ¹Í¬²½
-// RD10   IC3					UCIN-IC3		CÏàµçÑ¹Í¬²½
-// RD11   IC4					IAIN-IC4		AÏàµçÁ÷Í¬²½
+// RD8    IC1					UAIN-IC1		Aç›¸ç”µå‹åŒæ­¥
+// RD9    IC2					UBIN-IC2		Bç›¸ç”µå‹åŒæ­¥
+// RD10   IC3					UCIN-IC3		Cç›¸ç”µå‹åŒæ­¥
+// RD11   IC4					IAIN-IC4		Aç›¸ç”µæµåŒæ­¥
 
 // RD12   IC5
-// RD13	  IC6					OU8-RD13		¿É±à³ÌÊä³ö8
-// RD14	  IC7					OU9-RD14		¿É±à³ÌÊä³ö9
-// RD15	  IC8					OU10-RD15		¿É±à³ÌÊä³ö10
+// RD13	  IC6					OU8-RD13		å¯ç¼–ç¨‹è¾“å‡º8
+// RD14	  IC7					OU9-RD14		å¯ç¼–ç¨‹è¾“å‡º9
+// RD15	  IC8					OU10-RD15		å¯ç¼–ç¨‹è¾“å‡º10
 
     TRISD = 0x0F00;
     LATD  = 0XFFFF;  
@@ -969,16 +969,16 @@ void SetupPorts( void )
 
 // ============= Port F ==============
 
-// RF0    C1RX                  	TRCS2-RF0		RS485Íâ²¿Í¨Ñ¶½Ó¿ÚÊÕ·¢¿ØÖÆ
-// RF1    C1TX                      TRCS1-RF1		RS485²¢ÁªÍ¨Ñ¶½Ó¿ÚÊÕ·¢¿ØÖÆ
-// RF2    U1RX						U1RX			RS485²¢ÁªÍ¨Ñ¶½Ó¿Ú
-// RF3    U1TX        				U1TX			RS485²¢ÁªÍ¨Ñ¶½Ó¿Ú
+// RF0    C1RX                  	TRCS2-RF0		RS485å¤–éƒ¨é€šè®¯æ¥å£æ”¶å‘æ§åˆ¶
+// RF1    C1TX                      TRCS1-RF1		RS485å¹¶è”é€šè®¯æ¥å£æ”¶å‘æ§åˆ¶
+// RF2    U1RX						U1RX			RS485å¹¶è”é€šè®¯æ¥å£
+// RF3    U1TX        				U1TX			RS485å¹¶è”é€šè®¯æ¥å£
 
-// RF4    U2RX/CN17                	U2RX			RS485Íâ²¿Í¨Ñ¶½Ó¿Ú
-// RF5    U2TX/CN18                	U2TX			RS485Íâ²¿Í¨Ñ¶½Ó¿Ú
-// RF6    EMUC3/SCK1/INT0			RUN-RF6			ÊÖ¶¯ÔËĞĞÊäÈë
-// RF7    SDI1						STOP-RF7		Í£Ö¹ÔËĞĞÊäÈë
-// RF8    EMUD3/SDO1				AUTO-RF8		×Ô¶¯ÔËĞĞÊäÈë
+// RF4    U2RX/CN17                	U2RX			RS485å¤–éƒ¨é€šè®¯æ¥å£
+// RF5    U2TX/CN18                	U2TX			RS485å¤–éƒ¨é€šè®¯æ¥å£
+// RF6    EMUC3/SCK1/INT0			RUN-RF6			æ‰‹åŠ¨è¿è¡Œè¾“å…¥
+// RF7    SDI1						STOP-RF7		åœæ­¢è¿è¡Œè¾“å…¥
+// RF8    EMUD3/SDO1				AUTO-RF8		è‡ªåŠ¨è¿è¡Œè¾“å…¥
 //        absent
 //        absent
 //        absent
@@ -993,18 +993,18 @@ void SetupPorts( void )
 
 // ============= Port G ==============
 
-// RG0    C2RX						RG0			LCD¸´Î»
+// RG0    C2RX						RG0			LCDå¤ä½
 // RG1    C2TX
-// RG2    SCL						SCL			¼üÅÌ½Ó¿Ú
-// RG3    SDA						SDA			¼üÅÌ½Ó¿Ú
+// RG2    SCL						SCL			é”®ç›˜æ¥å£
+// RG3    SDA						SDA			é”®ç›˜æ¥å£
 
 //        absent
 //        absent
-// RG6    SCK2/CN8					BD0-RG6		²¦Âë¿ª¹Ø0Î»
-// RG7    SDI2/CN9					BD1-RG7		²¦Âë¿ª¹Ø1Î»
+// RG6    SCK2/CN8					BD0-RG6		æ‹¨ç å¼€å…³0ä½
+// RG7    SDI2/CN9					BD1-RG7		æ‹¨ç å¼€å…³1ä½
 
-// RG8    SDO2/CN10					BD2-RG7		²¦Âë¿ª¹Ø2Î»
-// RG9    SS2/CN11					BD3-RG8		²¦Âë¿ª¹Ø3Î»         
+// RG8    SDO2/CN10					BD2-RG7		æ‹¨ç å¼€å…³2ä½
+// RG9    SS2/CN11					BD3-RG8		æ‹¨ç å¼€å…³3ä½         
 //        absent               
 //        absent
 
@@ -1019,54 +1019,54 @@ void SetupPorts( void )
 
 }
 
-//¶¨Ê±Æ÷³õÊ¼»¯
+//å®šæ—¶å™¨åˆå§‹åŒ–
 void InitTimer( void )
 {
-//  Timer1³õÊ¼»¯ 
+//  Timer1åˆå§‹åŒ– 
 
-    T1CON = 0;					// ¹Ø±Õ¶¨Ê±Æ÷1
+    T1CON = 0;					// å…³é—­å®šæ—¶å™¨1
     TMR1 = 0;          			// clear timer1 register 
-    T1CONbits.TSIDL = 0;        // ¿ÕÏĞÄ£Ê½ÏÂÍ£Ö¹¹¤×÷   
+    T1CONbits.TSIDL = 0;        // ç©ºé—²æ¨¡å¼ä¸‹åœæ­¢å·¥ä½œ   
     T1CONbits.TCS = 0; 			// set internal clock source
-	T1CONbits.TCKPS = 0;		// Tcy / 1 ×÷ÎªÊäÈëÊ±ÖÓ  
+	T1CONbits.TCKPS = 0;		// Tcy / 1 ä½œä¸ºè¾“å…¥æ—¶é’Ÿ  
     PR1 = dTImer1Tcy;			// set period1 register 
     IPC0bits.T1IP = 5; 			// set priority level 
     IFS0bits.T1IF = 0; 			//clear interrupt flag 
     IEC0bits.T1IE = 1; 			// enable interrupts 
     SRbits.IPL = 3;    			//enable CPU priority levels 4-7
 
-//Timer2³õÊ¼»¯
+//Timer2åˆå§‹åŒ–
 
-    T2CON = 0;                   // ¹Ø±Õ¶¨Ê±Æ÷2
-    TMR2 = 0;                    // ¸´Î»¶¨Ê±Æ÷2¼ÆÊıÆ÷
-    T2CONbits.TSIDL = 0;         // ¿ÕÏĞÄ£Ê½ÏÂÍ£Ö¹¹¤×÷
-    T2CONbits.TGATE = 0;         // ½ûÖ¹ÃÅ¿Ø¶¨Ê±Æ÷ÀÛ¼Æ
-    T2CONbits.TCS = 0;           // Ê¹ÓÃTcy ×÷ÎªÔ´Ê±ÖÓ
-    T2CONbits.TCKPS = 0;         // Tcy / 64 ×÷ÎªÊäÈëÊ±ÖÓ
-    T2CONbits.TON = 1;           // ¿ªÆôtimer2
-    PR2 = 0x0FFF;                  // ÖĞ¶ÏÖÜÆÚ = 0.008 Ãë£¬Ô¤·ÖÆµÆ÷·ÖÆµ±ÈÎª64[3750suan]
+    T2CON = 0;                   // å…³é—­å®šæ—¶å™¨2
+    TMR2 = 0;                    // å¤ä½å®šæ—¶å™¨2è®¡æ•°å™¨
+    T2CONbits.TSIDL = 0;         // ç©ºé—²æ¨¡å¼ä¸‹åœæ­¢å·¥ä½œ
+    T2CONbits.TGATE = 0;         // ç¦æ­¢é—¨æ§å®šæ—¶å™¨ç´¯è®¡
+    T2CONbits.TCS = 0;           // ä½¿ç”¨Tcy ä½œä¸ºæºæ—¶é’Ÿ
+    T2CONbits.TCKPS = 0;         // Tcy / 64 ä½œä¸ºè¾“å…¥æ—¶é’Ÿ
+    T2CONbits.TON = 1;           // å¼€å¯timer2
+    PR2 = 0x0FFF;                  // ä¸­æ–­å‘¨æœŸ = 0.008 ç§’ï¼Œé¢„åˆ†é¢‘å™¨åˆ†é¢‘æ¯”ä¸º64[3750suan]
     IPC1bits.T2IP = 5;
-    IFS0bits.T2IF = 0;           // ÇåÁãtimer2 ÖĞ¶Ï±êÖ¾
-    IEC0bits.T2IE = 0;           // ÔÊĞítimer2 ÖĞ¶Ï 
+    IFS0bits.T2IF = 0;           // æ¸…é›¶timer2 ä¸­æ–­æ ‡å¿—
+    IEC0bits.T2IE = 0;           // å…è®¸timer2 ä¸­æ–­ 
 
 
-//Timer3³õÊ¼»¯
+//Timer3åˆå§‹åŒ–
 
-    T3CON= 0;                    // ¹Ø±Õ¶¨Ê±Æ÷3
-    TMR3 = 0;                    // ¸´Î»¶¨Ê±Æ÷¼Æ3ÊıÆ÷
-    T3CONbits.TSIDL = 0;         // ¿ÕÏĞÄ£Ê½ÏÂÍ£Ö¹¹¤×÷
-    T3CONbits.TGATE = 0;         // ½ûÖ¹ÃÅ¿Ø¶¨Ê±Æ÷ÀÛ¼Æ
-    T3CONbits.TCS = 0;           // Ê¹ÓÃTcy ×÷ÎªÔ´Ê±ÖÓ
-    T3CONbits.TCKPS = 3;         // Tcy / 8 ×÷ÎªÊäÈëÊ±ÖÓ
-    T3CONbits.TON = 1;           // ¿ªÆôtimer3
+    T3CON= 0;                    // å…³é—­å®šæ—¶å™¨3
+    TMR3 = 0;                    // å¤ä½å®šæ—¶å™¨è®¡3æ•°å™¨
+    T3CONbits.TSIDL = 0;         // ç©ºé—²æ¨¡å¼ä¸‹åœæ­¢å·¥ä½œ
+    T3CONbits.TGATE = 0;         // ç¦æ­¢é—¨æ§å®šæ—¶å™¨ç´¯è®¡
+    T3CONbits.TCS = 0;           // ä½¿ç”¨Tcy ä½œä¸ºæºæ—¶é’Ÿ
+    T3CONbits.TCKPS = 3;         // Tcy / 8 ä½œä¸ºè¾“å…¥æ—¶é’Ÿ
+    T3CONbits.TON = 1;           // å¼€å¯timer3
     PR3 = 0x7FFF;                
-    IEC0bits.T3IE = 0;           // ½ûÖ¹timer3 ÖĞ¶Ï
+    IEC0bits.T3IE = 0;           // ç¦æ­¢timer3 ä¸­æ–­
 
 
-//  Timer4³õÊ¼»¯ 
+//  Timer4åˆå§‹åŒ– 
 /*
     T4CON = 0;
-    T4CONbits.TSIDL = 1;        // ¿ÕÏĞÄ£Ê½ÏÂÍ£Ö¹¹¤×÷   
+    T4CONbits.TSIDL = 1;        // ç©ºé—²æ¨¡å¼ä¸‹åœæ­¢å·¥ä½œ   
     TMR4 = 0;          			// clear timer1 register 
     PR4 = dTImer4Tcy; 			// set period1 register 
     T4CONbits.TCS = 0; 			// set internal clock source 
@@ -1077,143 +1077,143 @@ void InitTimer( void )
 }
 
 
-//IO¿ÚÌø±ä¼ì²â¹¦ÄÜ³õÊ¼»¯
+//IOå£è·³å˜æ£€æµ‹åŠŸèƒ½åˆå§‹åŒ–
 /*
 void InitCN(void)
 {
     CNEN1 = 0;
     CNEN2 = 0;
-    CNEN1bits.CN0IE = 1; 				//¿ªÆô CN0 µçÆ½Ìø±äÒı½Å
-    CNEN1bits.CN1IE = 1; 				//¿ªÆô CN1 µçÆ½Ìø±äÒı½Å
-    CNEN1bits.CN2IE = 1; 				//¿ªÆô CN2 µçÆ½Ìø±äÒı½Å
-    CNEN1bits.CN3IE = 1; 				//¿ªÆô CN3 µçÆ½Ìø±äÒı½Å
-    CNEN1bits.CN4IE = 1; 				//¿ªÆô CN4 µçÆ½Ìø±äÒı½Å
-    CNEN1bits.CN5IE = 1; 				//¿ªÆô CN5 µçÆ½Ìø±äÒı½Å
+    CNEN1bits.CN0IE = 1; 				//å¼€å¯ CN0 ç”µå¹³è·³å˜å¼•è„š
+    CNEN1bits.CN1IE = 1; 				//å¼€å¯ CN1 ç”µå¹³è·³å˜å¼•è„š
+    CNEN1bits.CN2IE = 1; 				//å¼€å¯ CN2 ç”µå¹³è·³å˜å¼•è„š
+    CNEN1bits.CN3IE = 1; 				//å¼€å¯ CN3 ç”µå¹³è·³å˜å¼•è„š
+    CNEN1bits.CN4IE = 1; 				//å¼€å¯ CN4 ç”µå¹³è·³å˜å¼•è„š
+    CNEN1bits.CN5IE = 1; 				//å¼€å¯ CN5 ç”µå¹³è·³å˜å¼•è„š
     
     CNPU1 = 0;
     CNPU2 = 0;
-    CNPU1bits.CN0PUE = 1;				//¿ªÆô CN0 µçÆ½±ä»¯ÉÏÀ­
-    CNPU1bits.CN1PUE = 1;				//¿ªÆô CN1 µçÆ½±ä»¯ÉÏÀ­
-    CNPU1bits.CN2PUE = 1;				//¿ªÆô CN2 µçÆ½±ä»¯ÉÏÀ­
-    CNPU1bits.CN3PUE = 1;				//¿ªÆô CN3 µçÆ½±ä»¯ÉÏÀ­
-    CNPU1bits.CN4PUE = 1;				//¿ªÆô CN4 µçÆ½±ä»¯ÉÏÀ­
-    CNPU1bits.CN5PUE = 1;				//¿ªÆô CN5 µçÆ½±ä»¯ÉÏÀ­
+    CNPU1bits.CN0PUE = 1;				//å¼€å¯ CN0 ç”µå¹³å˜åŒ–ä¸Šæ‹‰
+    CNPU1bits.CN1PUE = 1;				//å¼€å¯ CN1 ç”µå¹³å˜åŒ–ä¸Šæ‹‰
+    CNPU1bits.CN2PUE = 1;				//å¼€å¯ CN2 ç”µå¹³å˜åŒ–ä¸Šæ‹‰
+    CNPU1bits.CN3PUE = 1;				//å¼€å¯ CN3 ç”µå¹³å˜åŒ–ä¸Šæ‹‰
+    CNPU1bits.CN4PUE = 1;				//å¼€å¯ CN4 ç”µå¹³å˜åŒ–ä¸Šæ‹‰
+    CNPU1bits.CN5PUE = 1;				//å¼€å¯ CN5 ç”µå¹³å˜åŒ–ä¸Šæ‹‰
     
 
-    IPC3bits.CNIP = 3;              //ÉèÖÃÖĞ¶ÏÓÅÏÈ¼¶Îª5
-    IFS0bits.CNIF = 0;              //ÇåÁãÖĞ¶Ï±êÖ¾
-    IEC0bits.CNIE = 1;              //ÔÊĞíCNÖĞ¶Ï
+    IPC3bits.CNIP = 3;              //è®¾ç½®ä¸­æ–­ä¼˜å…ˆçº§ä¸º5
+    IFS0bits.CNIF = 0;              //æ¸…é›¶ä¸­æ–­æ ‡å¿—
+    IEC0bits.CNIE = 1;              //å…è®¸CNä¸­æ–­
     
 }
 */
 
 void InitIC( void )
 {
-//	IC1³õÊ¼»¯	
-    IC1CON=0;                        //½ûÖ¹²¶×½Ä£¿é
-    IC1CONbits.ICTMR = 0;            //²¶×½ÊÂ¼şÊ±²¶×½TMR3µÄÄÚÈİ
-    IC1CONbits.ICI = 0;              //Ã¿1´Î²¶×½ÊÂ¼şÖĞ¶ÏÒ»´Î
-    IC1CONbits.ICM = 1;              //Ã¿´ÎÏÂ½µÑØ²¶×½ÊÂ¼ş
+//	IC1åˆå§‹åŒ–	
+    IC1CON=0;                        //ç¦æ­¢æ•æ‰æ¨¡å—
+    IC1CONbits.ICTMR = 0;            //æ•æ‰äº‹ä»¶æ—¶æ•æ‰TMR3çš„å†…å®¹
+    IC1CONbits.ICI = 0;              //æ¯1æ¬¡æ•æ‰äº‹ä»¶ä¸­æ–­ä¸€æ¬¡
+    IC1CONbits.ICM = 1;              //æ¯æ¬¡ä¸‹é™æ²¿æ•æ‰äº‹ä»¶
    
-    IPC0bits.IC1IP = 6;              //ÉèÖÃÖĞ¶ÏÓÅÏÈ¼¶Îª5
-    IFS0bits.IC1IF = 0;              //ÇåÁãÖĞ¶Ï±êÖ¾
-    IEC0bits.IC1IE = 0;              // 1 ÔÊĞíIC1ÖĞ¶Ï
+    IPC0bits.IC1IP = 6;              //è®¾ç½®ä¸­æ–­ä¼˜å…ˆçº§ä¸º5
+    IFS0bits.IC1IF = 0;              //æ¸…é›¶ä¸­æ–­æ ‡å¿—
+    IEC0bits.IC1IE = 0;              // 1 å…è®¸IC1ä¸­æ–­
 
-//	IC2³õÊ¼»¯
-	IC2CON=0;                        //½ûÖ¹²¶×½Ä£¿é
-    IC2CONbits.ICTMR = 0;            //²¶×½ÊÂ¼şÊ±²¶×½TMR3µÄÄÚÈİ
-    IC2CONbits.ICI = 0;              //Ã¿1´Î²¶×½ÊÂ¼şÖĞ¶ÏÒ»´Î
-    IC2CONbits.ICM = 1;              //Ã¿´ÎÏÂ½µÑØ²¶×½ÊÂ¼ş
+//	IC2åˆå§‹åŒ–
+	IC2CON=0;                        //ç¦æ­¢æ•æ‰æ¨¡å—
+    IC2CONbits.ICTMR = 0;            //æ•æ‰äº‹ä»¶æ—¶æ•æ‰TMR3çš„å†…å®¹
+    IC2CONbits.ICI = 0;              //æ¯1æ¬¡æ•æ‰äº‹ä»¶ä¸­æ–­ä¸€æ¬¡
+    IC2CONbits.ICM = 1;              //æ¯æ¬¡ä¸‹é™æ²¿æ•æ‰äº‹ä»¶
    
-    IPC1bits.IC2IP = 6;              //ÉèÖÃÖĞ¶ÏÓÅÏÈ¼¶Îª5
-    IFS0bits.IC2IF = 0;              //ÇåÁãÖĞ¶Ï±êÖ¾
-    IEC0bits.IC2IE = 0;              // 1 ÔÊĞíIC2ÖĞ¶Ï
+    IPC1bits.IC2IP = 6;              //è®¾ç½®ä¸­æ–­ä¼˜å…ˆçº§ä¸º5
+    IFS0bits.IC2IF = 0;              //æ¸…é›¶ä¸­æ–­æ ‡å¿—
+    IEC0bits.IC2IE = 0;              // 1 å…è®¸IC2ä¸­æ–­
     
-//	IC3³õÊ¼»¯
-	IC3CON=0;                        //½ûÖ¹²¶×½Ä£¿é
-    IC3CONbits.ICTMR = 0;            //²¶×½ÊÂ¼şÊ±²¶×½TMR3µÄÄÚÈİ
-    IC3CONbits.ICI = 0;              //Ã¿1´Î²¶×½ÊÂ¼şÖĞ¶ÏÒ»´Î
-    IC3CONbits.ICM = 1;              //Ã¿´ÎÏÂ½µÑØ²¶×½ÊÂ¼ş
+//	IC3åˆå§‹åŒ–
+	IC3CON=0;                        //ç¦æ­¢æ•æ‰æ¨¡å—
+    IC3CONbits.ICTMR = 0;            //æ•æ‰äº‹ä»¶æ—¶æ•æ‰TMR3çš„å†…å®¹
+    IC3CONbits.ICI = 0;              //æ¯1æ¬¡æ•æ‰äº‹ä»¶ä¸­æ–­ä¸€æ¬¡
+    IC3CONbits.ICM = 1;              //æ¯æ¬¡ä¸‹é™æ²¿æ•æ‰äº‹ä»¶
    
-    IPC7bits.IC3IP = 6;              //ÉèÖÃÖĞ¶ÏÓÅÏÈ¼¶Îª5
-    IFS1bits.IC3IF = 0;              //ÇåÁãÖĞ¶Ï±êÖ¾
-    IEC1bits.IC3IE = 0;              // 1 ÔÊĞíIC7ÖĞ¶Ï  
+    IPC7bits.IC3IP = 6;              //è®¾ç½®ä¸­æ–­ä¼˜å…ˆçº§ä¸º5
+    IFS1bits.IC3IF = 0;              //æ¸…é›¶ä¸­æ–­æ ‡å¿—
+    IEC1bits.IC3IE = 0;              // 1 å…è®¸IC7ä¸­æ–­  
     
-//	IC4³õÊ¼»¯
-	IC4CON=0;                        //½ûÖ¹²¶×½Ä£¿é
-    IC4CONbits.ICTMR = 0;            //²¶×½ÊÂ¼şÊ±²¶×½TMR3µÄÄÚÈİ
-    IC4CONbits.ICI = 0;              //Ã¿1´Î²¶×½ÊÂ¼şÖĞ¶ÏÒ»´Î
-    IC4CONbits.ICM = 1;              //Ã¿´ÎÏÂ½µÑØ²¶×½ÊÂ¼ş
+//	IC4åˆå§‹åŒ–
+	IC4CON=0;                        //ç¦æ­¢æ•æ‰æ¨¡å—
+    IC4CONbits.ICTMR = 0;            //æ•æ‰äº‹ä»¶æ—¶æ•æ‰TMR3çš„å†…å®¹
+    IC4CONbits.ICI = 0;              //æ¯1æ¬¡æ•æ‰äº‹ä»¶ä¸­æ–­ä¸€æ¬¡
+    IC4CONbits.ICM = 1;              //æ¯æ¬¡ä¸‹é™æ²¿æ•æ‰äº‹ä»¶
    
-    IPC7bits.IC4IP = 6;              //ÉèÖÃÖĞ¶ÏÓÅÏÈ¼¶Îª5
-    IFS1bits.IC4IF = 0;              //ÇåÁãÖĞ¶Ï±êÖ¾
-    IEC1bits.IC4IE = 0;              // 1 ÔÊĞíIC7ÖĞ¶Ï  
+    IPC7bits.IC4IP = 6;              //è®¾ç½®ä¸­æ–­ä¼˜å…ˆçº§ä¸º5
+    IFS1bits.IC4IF = 0;              //æ¸…é›¶ä¸­æ–­æ ‡å¿—
+    IEC1bits.IC4IE = 0;              // 1 å…è®¸IC7ä¸­æ–­  
 
 
 }
 
-//PWM¹¦ÄÜ³õÊ¼»¯
+//PWMåŠŸèƒ½åˆå§‹åŒ–
 void InitPWM( void )
 {
 	                      
-	PTCON = 0x0000;    			// ½ûÖ¹PWM ,×ÔÓÉÔËĞĞÄ£Ê½,Ê±»ùÎªTcy
-	PTPER = dLoopInTcy;     	// PWM¼ÆÊıÖÜÆÚÉè¶¨
-    PWMCON1 = 0x0777;  			// ¸´Î»ºóÊ¹ÄÜPWM 1,2,3 ¶Ô¹¤×÷ÔÚ¶ÀÁ¢Ä£Ê½
-    PWMCON2 = 0x0000;  			// PWMÌØÊâÊÂ¼ş´¥·¢Æ÷·ÖÆµ±ÈÎª1£º1£¬½ûÖ¹¸ÄĞ´£¬ÊÇÄÜÕ¼¿Õ±È¸üĞÂ	
-    PWMCON2bits.IUE = 0;		// PDC¼Ä´æÆ÷Á¢¼´¸üĞÂ
-    PWMCON2bits.OSYNC = 1;		// ¸ÄĞ´Í¬²½
+	PTCON = 0x0000;    			// ç¦æ­¢PWM ,è‡ªç”±è¿è¡Œæ¨¡å¼,æ—¶åŸºä¸ºTcy
+	PTPER = dLoopInTcy;     	// PWMè®¡æ•°å‘¨æœŸè®¾å®š
+    PWMCON1 = 0x0777;  			// å¤ä½åä½¿èƒ½PWM 1,2,3 å¯¹å·¥ä½œåœ¨ç‹¬ç«‹æ¨¡å¼
+    PWMCON2 = 0x0000;  			// PWMç‰¹æ®Šäº‹ä»¶è§¦å‘å™¨åˆ†é¢‘æ¯”ä¸º1ï¼š1ï¼Œç¦æ­¢æ”¹å†™ï¼Œæ˜¯èƒ½å ç©ºæ¯”æ›´æ–°	
+    PWMCON2bits.IUE = 0;		// PDCå¯„å­˜å™¨ç«‹å³æ›´æ–°
+    PWMCON2bits.OSYNC = 1;		// æ”¹å†™åŒæ­¥
     
-    PDC1 = 0x0000;     			// ³õÊ¼»¯Õ¼¿Õ±È  
+    PDC1 = 0x0000;     			// åˆå§‹åŒ–å ç©ºæ¯”  
     PDC2 = 0x0000;
     PDC3 = 0x0000;
     
-	DTCON1 = (dDeadTime>>1);	// ËÀÇøÊ±»ù2·ÖÆµÊ±µÄÊ±¼ä
-    DTCON1bits.DTAPS=1;			//ËÀÇøÊ±»ù2·ÖÆµ
-    OVDCON = 0x0000;     		//¿ªÊ¼ÓÉPWM·¢ÉúÆ÷¿ØÖÆ
+	DTCON1 = (dDeadTime>>1);	// æ­»åŒºæ—¶åŸº2åˆ†é¢‘æ—¶çš„æ—¶é—´
+    DTCON1bits.DTAPS=1;			//æ­»åŒºæ—¶åŸº2åˆ†é¢‘
+    OVDCON = 0x0000;     		//å¼€å§‹ç”±PWMå‘ç”Ÿå™¨æ§åˆ¶
 
-	FLTACON = 0x0007;  			//¹ÊÕÏÒı½ÅÎªµÍµçÆ½Ê±£¬6Â·PWMÊä³öÎŞĞ§ 
+	FLTACON = 0x0007;  			//æ•…éšœå¼•è„šä¸ºä½ç”µå¹³æ—¶ï¼Œ6è·¯PWMè¾“å‡ºæ— æ•ˆ 
     FLTACONbits.FLTAM=0;
     
-	IPC10bits.FLTAIP=7;     	//ÉèÖÃ¹ıÁ÷¹ÊÕÏÖĞ¶ÏÎª×î¸ßÓÅÏÈ¼¶ÖĞ¶Ï
-	IFS2bits.FLTAIF=0;      	//ÇåFLTA¹ÊÕÏÖĞ¶Ï±êÖ¾Î» £¨FLTAÎª¹ıÁ÷¹ÊÕÏ£©
-	IEC2bits.FLTAIE = 1;    	//Ê¹ÄÜFLTA¹ÊÕÏÖĞ¶Ï
+	IPC10bits.FLTAIP=7;     	//è®¾ç½®è¿‡æµæ•…éšœä¸­æ–­ä¸ºæœ€é«˜ä¼˜å…ˆçº§ä¸­æ–­
+	IFS2bits.FLTAIF=0;      	//æ¸…FLTAæ•…éšœä¸­æ–­æ ‡å¿—ä½ ï¼ˆFLTAä¸ºè¿‡æµæ•…éšœï¼‰
+	IEC2bits.FLTAIE = 1;    	//ä½¿èƒ½FLTAæ•…éšœä¸­æ–­
 
             
-    SEVTCMP = 0;             	// 0 ²»ÓÉPWMÆô¶¯AD×ª»»
-    SEVTCMPbits.SEVTDIR = 0; 	// 0 ,ÌØÊâÊÂ¼ş´¥·¢ĞÅºÅ½«ÔÚPWM Ê±»ùµÄÏòÉÏ¼ÆÊıÖÜÆÚ²úÉú
+    SEVTCMP = 0;             	// 0 ä¸ç”±PWMå¯åŠ¨ADè½¬æ¢
+    SEVTCMPbits.SEVTDIR = 0; 	// 0 ,ç‰¹æ®Šäº‹ä»¶è§¦å‘ä¿¡å·å°†åœ¨PWM æ—¶åŸºçš„å‘ä¸Šè®¡æ•°å‘¨æœŸäº§ç”Ÿ
     IPC9bits.PWMIP = 7;			// 
-    IFS2bits.PWMIF = 0;   		// ÇåPWMÖĞ¶Ï±êÖ¾Î»
-    IEC2bits.PWMIE = 1;  		// Ê¹ÄÜPWMÖĞ¶Ï
+    IFS2bits.PWMIF = 0;   		// æ¸…PWMä¸­æ–­æ ‡å¿—ä½
+    IEC2bits.PWMIE = 1;  		// ä½¿èƒ½PWMä¸­æ–­
     
     
 }
 
 
-//Õı½»±àÂëÆ÷³õÊ¼»¯
+//æ­£äº¤ç¼–ç å™¨åˆå§‹åŒ–
 /*
 void InitQEI( void )
 {
-    ADPCFG = 0x0030;           			// ½«QEI Òı½ÅÅäÖÃÎªÊı×ÖÊäÈë
-    QEICONbits.QEIM = 0;         		// ½ûÖ¹QEI Ä£¿é
-    QEICONbits.CNTERR = 0;       		// Çå³ıÈÎºÎ¼ÆÊı´íÎó
-    QEICONbits.QEISIDL = 1;      		// ĞİÃßÆÚ¼ä½ûÖ¹¹¤×÷
-    QEICONbits.SWPAB = 0;        		// QEA ºÍQEB ²»½»»»
-    QEICONbits.PCDOUT = 0;       		// Õı³£I/O Òı½Å²Ù×÷£¬ÎŞĞè·½ÏòÊä³ö
-    QEICONbits.POSRES = 0;       		// ½ûÖ¹Ë÷ÒıÂö³å¸´Î»
-    DFLTCONbits.CEID = 1;        		// ½ûÖ¹¼ÆÊı´íÎóÖĞ¶Ï
-    DFLTCONbits.QEOUT = 0;       		// ¶ÔÓÚQEn Òı½Å£¬½ûÖ¹Êı×ÖÂË²¨Æ÷Êä³ö
-	DFLTCONbits.QECK = 0;        		// ½«QEn µÄÊı×ÖÂË²¨Æ÷ÉèÖÃÎª1:1Ê±ÖÓ·ÖÆµ[suan]
-	DFLTCONbits.INDOUT = 0;      		// Ë÷ÒıÂö³åÂË²¨½ûÖ¹
-    POSCNT = 0;                  		// ¸´Î»Î»ÖÃ¼ÆÊıÆ÷
-	MAXCNT = MotorParm.iCntsPerRev;		//2400;	//Éè³É×î´ó×ªÒ»È¦µÄ×î´óÂö³å
-    QEICONbits.QEIM = 7;         		// ¿ªÆôQEI£¬X4 Ä£Ê½£¬Í¨¹ıÓë(MAXCNT)Æ¥Åä¸´Î»Î»ÖÃ¼ÆÊıÆ÷
+    ADPCFG = 0x0030;           			// å°†QEI å¼•è„šé…ç½®ä¸ºæ•°å­—è¾“å…¥
+    QEICONbits.QEIM = 0;         		// ç¦æ­¢QEI æ¨¡å—
+    QEICONbits.CNTERR = 0;       		// æ¸…é™¤ä»»ä½•è®¡æ•°é”™è¯¯
+    QEICONbits.QEISIDL = 1;      		// ä¼‘çœ æœŸé—´ç¦æ­¢å·¥ä½œ
+    QEICONbits.SWPAB = 0;        		// QEA å’ŒQEB ä¸äº¤æ¢
+    QEICONbits.PCDOUT = 0;       		// æ­£å¸¸I/O å¼•è„šæ“ä½œï¼Œæ— éœ€æ–¹å‘è¾“å‡º
+    QEICONbits.POSRES = 0;       		// ç¦æ­¢ç´¢å¼•è„‰å†²å¤ä½
+    DFLTCONbits.CEID = 1;        		// ç¦æ­¢è®¡æ•°é”™è¯¯ä¸­æ–­
+    DFLTCONbits.QEOUT = 0;       		// å¯¹äºQEn å¼•è„šï¼Œç¦æ­¢æ•°å­—æ»¤æ³¢å™¨è¾“å‡º
+	DFLTCONbits.QECK = 0;        		// å°†QEn çš„æ•°å­—æ»¤æ³¢å™¨è®¾ç½®ä¸º1:1æ—¶é’Ÿåˆ†é¢‘[suan]
+	DFLTCONbits.INDOUT = 0;      		// ç´¢å¼•è„‰å†²æ»¤æ³¢ç¦æ­¢
+    POSCNT = 0;                  		// å¤ä½ä½ç½®è®¡æ•°å™¨
+	MAXCNT = MotorParm.iCntsPerRev;		//2400;	//è®¾æˆæœ€å¤§è½¬ä¸€åœˆçš„æœ€å¤§è„‰å†²
+    QEICONbits.QEIM = 7;         		// å¼€å¯QEIï¼ŒX4 æ¨¡å¼ï¼Œé€šè¿‡ä¸(MAXCNT)åŒ¹é…å¤ä½ä½ç½®è®¡æ•°å™¨
 }
 */
 
-//AD×ª»»¹¦ÄÜ³õÊ¼»¯
+//ADè½¬æ¢åŠŸèƒ½åˆå§‹åŒ–
 void InitAD(void)
 {
-// 1.ÅäÖÃ¶Ë¿ÚÒı½Å×÷ÎªÄ£ÄâÊäÈë£¬½«ÏàÓ¦Î»ÖÃ0
+// 1.é…ç½®ç«¯å£å¼•è„šä½œä¸ºæ¨¡æ‹Ÿè¾“å…¥ï¼Œå°†ç›¸åº”ä½ç½®0
     ADPCFG = 0xFFFF;        // Set all ports digital
     ADPCFGbits.PCFG10 = 0;   // AN5 analog
     ADPCFGbits.PCFG11 = 0;   // AN6 analog
@@ -1222,71 +1222,71 @@ void InitAD(void)
     ADPCFGbits.PCFG14 = 0;   // AN7 analog
     ADPCFGbits.PCFG15 = 0;   // AN8 analog
     
-// 2.Ñ¡Ôñ²Î¿¼µçÑ¹Ô´ ADCON2µÄ13¡ª¡ª15Î»
+// 2.é€‰æ‹©å‚è€ƒç”µå‹æº ADCON2çš„13â€”â€”15ä½
     ADCON2 = 0x0000;        
-    ADCON2bits.VCFG = 1;    // 1 Ê¹ÓÃÍâ²¿²Î¿¼µçÔ´
-    ADCON2bits.CSCNA = 1;   // É¨ÃèÊäÈë
-    ADCON2bits.CHPS = 0;    // ×ª»¯CH0
-    ADCON2bits.SMPI = 5;    // Ã¿6´Î×ª»¯Íê²ú³ÉÖĞ¶Ï
-    ADCON2bits.ALTS = 0;    // ×ÜÊÇ²ÉÓÃMUX A¿ª¹Ø
+    ADCON2bits.VCFG = 1;    // 1 ä½¿ç”¨å¤–éƒ¨å‚è€ƒç”µæº
+    ADCON2bits.CSCNA = 1;   // æ‰«æè¾“å…¥
+    ADCON2bits.CHPS = 0;    // è½¬åŒ–CH0
+    ADCON2bits.SMPI = 5;    // æ¯6æ¬¡è½¬åŒ–å®Œäº§æˆä¸­æ–­
+    ADCON2bits.ALTS = 0;    // æ€»æ˜¯é‡‡ç”¨MUX Aå¼€å…³
 
-// 3.Ñ¡ÔñÄ£Äâ×ª»»Ê±ÖÓADCON3
-    ADCON3 =  0x0000;        //Ê¹ÓÃÄÚ²¿Ê±ÖÓ 
+// 3.é€‰æ‹©æ¨¡æ‹Ÿè½¬æ¢æ—¶é’ŸADCON3
+    ADCON3 =  0x0000;        //ä½¿ç”¨å†…éƒ¨æ—¶é’Ÿ 
     ADCON3bits.SAMC = 0x02;
-    ADCON3bits.ADCS = 0x3F;    // AD×ª»»Ê±ÖÓÑ¡Ôñ TAD =  6*Tcy  
+    ADCON3bits.ADCS = 0x3F;    // ADè½¬æ¢æ—¶é’Ÿé€‰æ‹© TAD =  6*Tcy  
  
-// 4.ADÊäÈëÑ¡ÔñADCHS
+// 4.ADè¾“å…¥é€‰æ‹©ADCHS
     ADCHS=0x0000;
-    ADCHSbits.CH0SA = 10;               // CH0,Í¨µÀÑ¡ÔñAN6
+    ADCHSbits.CH0SA = 10;               // CH0,é€šé“é€‰æ‹©AN6
     ADCHSbits.CH0NA = 0;               
     
-    //ADCHSbits.CH123SA = 1;               // CH0,Í¨µÀÑ¡ÔñAN6
+    //ADCHSbits.CH123SA = 1;               // CH0,é€šé“é€‰æ‹©AN6
     //ADCHSbits.CH123NA = 0;               
       
     
-// 5.ÅäÖÃADCSSLÉ¨ÃèÑ¡Ôñ¼Ä´æÆ÷ £¬²»É¨ÃèÑ¡0
+// 5.é…ç½®ADCSSLæ‰«æé€‰æ‹©å¯„å­˜å™¨ ï¼Œä¸æ‰«æé€‰0
     ADCSSL = 0x0000;    
-    ADCSSLbits.CSSL10 = 1;    //É¨ÃèÊäÈë2.3.6Í¨µÀ
+    ADCSSLbits.CSSL10 = 1;    //æ‰«æè¾“å…¥2.3.6é€šé“
     ADCSSLbits.CSSL11 = 1;
     ADCSSLbits.CSSL12 = 1;
     ADCSSLbits.CSSL13 = 1;
     ADCSSLbits.CSSL14 = 1;
     ADCSSLbits.CSSL15 = 1;
     
-// 6.ÅäÖÃ²ÉÑù/×ª»»¹ı³ÌADCON1
+// 6.é…ç½®é‡‡æ ·/è½¬æ¢è¿‡ç¨‹ADCON1
     ADCON1 = 0;
-    ADCON1bits.FORM = 0;    // ×ª»»½á¹û¸ñÊ½
-	ADCON1bits.SSRC = 7;    //  "0" ÊÖ¶¯Æô¶¯AD×ª»»
-    ADCON1bits.ASAM = 1;    // ×ª»»½áÊø£¬×Ô¶¯²ÉÑù¿ªÊ¼Îª£¬ÖÃ1Ê¹ÄÜ
-    ADCON1bits.SIMSAM = 1;	// Í¬Ê±²ÉÑù
+    ADCON1bits.FORM = 0;    // è½¬æ¢ç»“æœæ ¼å¼
+	ADCON1bits.SSRC = 7;    //  "0" æ‰‹åŠ¨å¯åŠ¨ADè½¬æ¢
+    ADCON1bits.ASAM = 1;    // è½¬æ¢ç»“æŸï¼Œè‡ªåŠ¨é‡‡æ ·å¼€å§‹ä¸ºï¼Œç½®1ä½¿èƒ½
+    ADCON1bits.SIMSAM = 1;	// åŒæ—¶é‡‡æ ·
     
-// 7.¿ªÆôA/D²ÉÑùÍ¨µÀ
-//    ADCON1bits.ADON = 1;    // ¿ªÆô AD Ä£¿é  
+// 7.å¼€å¯A/Dé‡‡æ ·é€šé“
+//    ADCON1bits.ADON = 1;    // å¼€å¯ AD æ¨¡å—  
 
-// 8.ÅäÖÃADÖĞ¶Ï
+// 8.é…ç½®ADä¸­æ–­
     IPC2bits.ADIP = 5;   
-    IFS0bits.ADIF = 0;   //ÇåADÖĞ¶Ï±êÖ¾Î»
-    IEC0bits.ADIE = 1;   //Ê¹ÄÜADÖĞ¶Ï
+    IFS0bits.ADIF = 0;   //æ¸…ADä¸­æ–­æ ‡å¿—ä½
+    IEC0bits.ADIE = 1;   //ä½¿èƒ½ADä¸­æ–­
 }
 
-// I2C ×ÜÏß³õÊ¼»¯
+// I2C æ€»çº¿åˆå§‹åŒ–
 void InitI2C(void)
 {
 	I2CCON = 0;
-	I2CCONbits.I2CEN = 1;		// Ê¹ÄÜ I2C
-	I2CCONbits.I2CSIDL = 1;		// ¿ÕÏĞÄ£Ê½
-	I2CCONbits.SCLREL = 1;		// ÊÍ·ÅSCLÊ±ÖÓ
-	I2CCONbits.IPMIEN = 0;		// Ê¹ÄÜIPMIÖ§³ÖÄ£Ê½
-	I2CCONbits.A10M = 0;		// 7Î»´ÓÆ÷¼şµØÖ·
-	I2CCONbits.GCEN = 0;		// ½ÓÊÜ¹ã²¥ºô½Ğ
-	I2CCONbits.STREN = 0;		// Ê¹ÄÜµçÆ½ÑÓ³¤
-	I2CCONbits.RCEN = 0;		// Ê¹ÄÜ½ÓÊÜÄ£Ê½
+	I2CCONbits.I2CEN = 1;		// ä½¿èƒ½ I2C
+	I2CCONbits.I2CSIDL = 1;		// ç©ºé—²æ¨¡å¼
+	I2CCONbits.SCLREL = 1;		// é‡Šæ”¾SCLæ—¶é’Ÿ
+	I2CCONbits.IPMIEN = 0;		// ä½¿èƒ½IPMIæ”¯æŒæ¨¡å¼
+	I2CCONbits.A10M = 0;		// 7ä½ä»å™¨ä»¶åœ°å€
+	I2CCONbits.GCEN = 0;		// æ¥å—å¹¿æ’­å‘¼å«
+	I2CCONbits.STREN = 0;		// ä½¿èƒ½ç”µå¹³å»¶é•¿
+	I2CCONbits.RCEN = 0;		// ä½¿èƒ½æ¥å—æ¨¡å¼
 	I2CCONbits.ACKDT = 1;		
 	
 	I2CBRG = dI2CBaudRateTcy;
 	I2CADD = 0x0055;
 	
-	IEC0bits.SI2CIE = 0;		// 1 ÔÊĞíSI2CÖĞ¶Ï  
+	IEC0bits.SI2CIE = 0;		// 1 å…è®¸SI2Cä¸­æ–­  
 	IFS0bits.SI2CIF = 0;
 	IPC3bits.SI2CIP = 6;
 	
@@ -1296,23 +1296,23 @@ void InitI2C(void)
 	
 }
 
-// UART2 ´®ĞĞÍ¨Ñ¶³õÊ¼»¯
+// UART2 ä¸²è¡Œé€šè®¯åˆå§‹åŒ–
 void InitUART2(void)
 {	
 	U2MODE = 0;
-	U2MODEbits.UARTEN = 1;					// Ê¹ÄÜUART
-	U2MODEbits.USIDL = 1;					// ¿ÕÏĞÄ£Ê½
-	U2MODEbits.ABAUD = 0;					// ×Ô¶¯²¨ÌØÂÊ
-	U2MODEbits.PDSEL = Uart2Parm.dPDSEL;		// Êı¾İ¸ñÊ½
+	U2MODEbits.UARTEN = 1;					// ä½¿èƒ½UART
+	U2MODEbits.USIDL = 1;					// ç©ºé—²æ¨¡å¼
+	U2MODEbits.ABAUD = 0;					// è‡ªåŠ¨æ³¢ç‰¹ç‡
+	U2MODEbits.PDSEL = Uart2Parm.dPDSEL;		// æ•°æ®æ ¼å¼
 	
 	U2STA = 0;
 	U2STAbits.UTXEN = 1;
 	U2STAbits.UTXISEL = 1;
 		
-	U2BRG = Uart2Parm.dBaudRateTcy;		// ÉèÖÃ²¨ÌØÂÊ
+	U2BRG = Uart2Parm.dBaudRateTcy;		// è®¾ç½®æ³¢ç‰¹ç‡
 	
-	IEC1bits.U2TXIE = 0;				// 1 ÔÊĞíU2TXÖĞ¶Ï  
-	IEC1bits.U2RXIE = 0;				// 1 ÔÊĞíU2RXÖĞ¶Ï  
+	IEC1bits.U2TXIE = 0;				// 1 å…è®¸U2TXä¸­æ–­  
+	IEC1bits.U2RXIE = 0;				// 1 å…è®¸U2RXä¸­æ–­  
 	IFS1bits.U2TXIF = 0;
 	IFS1bits.U2RXIF = 0;
 	IPC6bits.U2TXIP = 5;
@@ -1320,23 +1320,23 @@ void InitUART2(void)
 	
 }
 
-// UART1 ´®ĞĞÍ¨Ñ¶³õÊ¼»¯
+// UART1 ä¸²è¡Œé€šè®¯åˆå§‹åŒ–
 void InitUART1(void)
 {	
 	U1MODE = 0;
-	U1MODEbits.UARTEN = 1;					// Ê¹ÄÜUART
-	U1MODEbits.USIDL = 1;					// ¿ÕÏĞÄ£Ê½
-	U1MODEbits.ABAUD = 0;					// ×Ô¶¯²¨ÌØÂÊ
-	U1MODEbits.PDSEL = Uart1Parm.dPDSEL;		// Êı¾İ¸ñÊ½
+	U1MODEbits.UARTEN = 1;					// ä½¿èƒ½UART
+	U1MODEbits.USIDL = 1;					// ç©ºé—²æ¨¡å¼
+	U1MODEbits.ABAUD = 0;					// è‡ªåŠ¨æ³¢ç‰¹ç‡
+	U1MODEbits.PDSEL = Uart1Parm.dPDSEL;		// æ•°æ®æ ¼å¼
 	
 	U1STA = 0;
 	U1STAbits.UTXEN = 1;
 	U1STAbits.UTXISEL = 1;
 		
-	U1BRG = Uart1Parm.dBaudRateTcy;		// ÉèÖÃ²¨ÌØÂÊ
+	U1BRG = Uart1Parm.dBaudRateTcy;		// è®¾ç½®æ³¢ç‰¹ç‡
 	
-	IEC0bits.U1TXIE = 0;				// 1 ÔÊĞíU2TXÖĞ¶Ï  
-	IEC0bits.U1RXIE = 0;				// 1 ÔÊĞíU2RXÖĞ¶Ï  
+	IEC0bits.U1TXIE = 0;				// 1 å…è®¸U2TXä¸­æ–­  
+	IEC0bits.U1RXIE = 0;				// 1 å…è®¸U2RXä¸­æ–­  
 	IFS0bits.U1TXIF = 0;
 	IFS0bits.U1RXIF = 0;
 	IPC2bits.U1TXIP = 5;
@@ -1344,7 +1344,7 @@ void InitUART1(void)
 	
 }
 
-//Êä³ö±È½Ï³õÊ¼»¯
+//è¾“å‡ºæ¯”è¾ƒåˆå§‹åŒ–
 void InitOC(void)
 {	
 	OC1CON = 0;

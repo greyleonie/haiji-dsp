@@ -1,15 +1,15 @@
-//º£¼ª¿Æ¼¼£¬HJR3000ĞÍÖÇÄÜÈíÆô¶¯¿ØÖÆ×°ÖÃ£¬DSPIC30F6010AÏµÍ³
-//PWMÖĞ¶Ï´¦Àí£¬PWMInterrupt.c
+//æµ·å‰ç§‘æŠ€ï¼ŒHJR3000å‹æ™ºèƒ½è½¯å¯åŠ¨æ§åˆ¶è£…ç½®ï¼ŒDSPIC30F6010Aç³»ç»Ÿ
+//PWMä¸­æ–­å¤„ç†ï¼ŒPWMInterrupt.c
 
-//Í·ÎÄ¼ş
-#include "UserParms.h"	//ÓÃ»§ÏµÍ³ÅäÖÃ£¬³£Êı¶¨Òå¼°ÅäÖÃÖµ
-#include "Function.h"	//ÏµÍ³Íâ²¿µ÷ÓÃº¯ÊıÉùÃ÷£¬ÄÚ²¿µ÷ÓÃº¯ÊıÔÚ¶ÔÓ¦ÎÄ¼şÄÚÉùÃ÷
-#include "variable.h"	//ÏµÍ³È«¾Ö±äÁ¿ÉùÃ÷£¬¾Ö²¿±äÁ¿ÔÚ¶ÔÓ¦ÎÄ¼şÄÚÉùÃ÷
-
-
+//å¤´æ–‡ä»¶
+#include "UserParms.h"	//ç”¨æˆ·ç³»ç»Ÿé…ç½®ï¼Œå¸¸æ•°å®šä¹‰åŠé…ç½®å€¼
+#include "Function.h"	//ç³»ç»Ÿå¤–éƒ¨è°ƒç”¨å‡½æ•°å£°æ˜ï¼Œå†…éƒ¨è°ƒç”¨å‡½æ•°åœ¨å¯¹åº”æ–‡ä»¶å†…å£°æ˜
+#include "variable.h"	//ç³»ç»Ÿå…¨å±€å˜é‡å£°æ˜ï¼Œå±€éƒ¨å˜é‡åœ¨å¯¹åº”æ–‡ä»¶å†…å£°æ˜
 
 
-//PWMÖĞ¶Ï
+
+
+//PWMä¸­æ–­
 void __attribute__((__interrupt__)) _PWMInterrupt(void)
 {
 	if(PwmState.StartOut == 0)
@@ -254,7 +254,7 @@ void __attribute__((__interrupt__)) _PWMInterrupt(void)
 	
 	}
 	
-    IFS2bits.PWMIF = 0;   //ÇåPWMÖĞ¶Ï±êÖ¾Î»
+    IFS2bits.PWMIF = 0;   //æ¸…PWMä¸­æ–­æ ‡å¿—ä½
     return;
 
 }

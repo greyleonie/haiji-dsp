@@ -1,16 +1,16 @@
-//º£¼ª¿Æ¼¼£¬HJR3000ĞÍÖÇÄÜÈíÆô¶¯¿ØÖÆ×°ÖÃ£¬DSPIC30F6010AÏµÍ³
-//¹ıÁ÷±£»¤¹¦ÄÜ´¦Àí£¬CurrProtect.c
+//æµ·å‰ç§‘æŠ€ï¼ŒHJR3000å‹æ™ºèƒ½è½¯å¯åŠ¨æ§åˆ¶è£…ç½®ï¼ŒDSPIC30F6010Aç³»ç»Ÿ
+//è¿‡æµä¿æŠ¤åŠŸèƒ½å¤„ç†ï¼ŒCurrProtect.c
 
-//Í·ÎÄ¼ş
-#include "UserParms.h"	//ÓÃ»§ÏµÍ³ÅäÖÃ£¬³£Êı¶¨Òå¼°ÅäÖÃÖµ
-#include "Function.h"	//ÏµÍ³Íâ²¿µ÷ÓÃº¯ÊıÉùÃ÷£¬ÄÚ²¿µ÷ÓÃº¯ÊıÔÚ¶ÔÓ¦ÎÄ¼şÄÚÉùÃ÷
-#include "variable.h"	//ÏµÍ³È«¾Ö±äÁ¿ÉùÃ÷£¬¾Ö²¿±äÁ¿ÔÚ¶ÔÓ¦ÎÄ¼şÄÚÉùÃ÷
+//å¤´æ–‡ä»¶
+#include "UserParms.h"	//ç”¨æˆ·ç³»ç»Ÿé…ç½®ï¼Œå¸¸æ•°å®šä¹‰åŠé…ç½®å€¼
+#include "Function.h"	//ç³»ç»Ÿå¤–éƒ¨è°ƒç”¨å‡½æ•°å£°æ˜ï¼Œå†…éƒ¨è°ƒç”¨å‡½æ•°åœ¨å¯¹åº”æ–‡ä»¶å†…å£°æ˜
+#include "variable.h"	//ç³»ç»Ÿå…¨å±€å˜é‡å£°æ˜ï¼Œå±€éƒ¨å˜é‡åœ¨å¯¹åº”æ–‡ä»¶å†…å£°æ˜
 
-void IOCorp(void);		//IO¿Ú×´Ì¬´¦Àí
+void IOCorp(void);		//IOå£çŠ¶æ€å¤„ç†
 int AX_int_Protect = 0, BX_int_Protect = 0;
 long AX_long_Protect = 0, BX_long_Protect = 0;
 
-//PWM¹ÊÕÏÖĞ¶Ï
+//PWMæ•…éšœä¸­æ–­
 void __attribute__((__interrupt__)) _FLTAInterrupt(void)
 {
 	if(StartState.PreStart == 1)
@@ -21,13 +21,13 @@ void __attribute__((__interrupt__)) _FLTAInterrupt(void)
 			PWMParams.FLTA_Js = 0;
 			StopPWM();
 			ErrorParm.InitError = ErrorParm.InitError | 0x8000;
-			IEC2bits.FLTAIE = 0;    //Ê¹ÄÜFLTA¹ÊÕÏÖĞ¶Ï
+			IEC2bits.FLTAIE = 0;    //ä½¿èƒ½FLTAæ•…éšœä¸­æ–­
 
 		}else
 		{
-			IFS2bits.FLTAIF = 0;   //Ö»Çå³ıÒ»´Î¹ıÁ÷¹ÊÕÏÖĞ¶Ï 
+			IFS2bits.FLTAIF = 0;   //åªæ¸…é™¤ä¸€æ¬¡è¿‡æµæ•…éšœä¸­æ–­ 
 		}
-	}else IFS2bits.FLTAIF = 0;   //Ö»Çå³ıÒ»´Î¹ıÁ÷¹ÊÕÏÖĞ¶Ï 
+	}else IFS2bits.FLTAIF = 0;   //åªæ¸…é™¤ä¸€æ¬¡è¿‡æµæ•…éšœä¸­æ–­ 
 	
 	return; 
 }

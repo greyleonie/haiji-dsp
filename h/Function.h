@@ -1,38 +1,38 @@
-//º£¼ª¿Æ¼¼£¬HJR3000ĞÍÖÇÄÜÈíÆô¶¯¿ØÖÆ×°ÖÃ£¬DSPIC30F6010AÏµÍ³
-//ÏµÍ³Íâ²¿µ÷ÓÃº¯ÊıÉùÃ÷£¬ÄÚ²¿µ÷ÓÃº¯ÊıÔÚ¶ÔÓ¦ÎÄ¼şÄÚÉùÃ÷  Function.h
+//æµ·å‰ç§‘æŠ€ï¼ŒHJR3000å‹æ™ºèƒ½è½¯å¯åŠ¨æ§åˆ¶è£…ç½®ï¼ŒDSPIC30F6010Aç³»ç»Ÿ
+//ç³»ç»Ÿå¤–éƒ¨è°ƒç”¨å‡½æ•°å£°æ˜ï¼Œå†…éƒ¨è°ƒç”¨å‡½æ•°åœ¨å¯¹åº”æ–‡ä»¶å†…å£°æ˜  Function.h
 
 #ifndef Function_H
 #define Function_H   
    
-//¶ÁEEP£¬ÅäÖÃÏµÍ³²ÎÊı
+//è¯»EEPï¼Œé…ç½®ç³»ç»Ÿå‚æ•°
 extern  void SysConfig(void);
-//³õÊ¼»¯¸÷¶Ë¿Ú1
+//åˆå§‹åŒ–å„ç«¯å£1
 extern  void SetupPorts(void);
-//³õÊ¼»¯¶¨Ê±Æ÷
+//åˆå§‹åŒ–å®šæ—¶å™¨
 extern  void InitTimer(void);
-//³õÊ¼»¯PWM
+//åˆå§‹åŒ–PWM
 extern void  InitPWM(void);
-//³õÊ¼»¯AD
+//åˆå§‹åŒ–AD
 extern void  InitAD(void);
-//³õÊ¼»¯²¶»ñµ¥Ôª
+//åˆå§‹åŒ–æ•è·å•å…ƒ
 extern void InitIC( void );
-//³õÊ¼»¯Õı½»±àÂëµ¥Ôª
+//åˆå§‹åŒ–æ­£äº¤ç¼–ç å•å…ƒ
 extern void InitQEI(void);
-//³õÊ¼»¯CN
+//åˆå§‹åŒ–CN
 extern void InitCN(void);
-// I2C ×ÜÏß³õÊ¼»¯
+// I2C æ€»çº¿åˆå§‹åŒ–
 extern void InitI2C(void);
-// UART1 ´®ĞĞÍ¨Ñ¶³õÊ¼»¯
+// UART1 ä¸²è¡Œé€šè®¯åˆå§‹åŒ–
 extern void InitUART1(void);
-// UART2 ´®ĞĞÍ¨Ñ¶³õÊ¼»¯
+// UART2 ä¸²è¡Œé€šè®¯åˆå§‹åŒ–
 extern void InitUART2(void);
-//Êä³ö±È½Ï³õÊ¼»¯
+//è¾“å‡ºæ¯”è¾ƒåˆå§‹åŒ–
 extern void InitOC(void);
-//¶ÁEEPROM
+//è¯»EEPROM
 extern int ReadEE(int Page, int Offset, int* DataOut, int Size);
-//²Á³ıEEPROM
+//æ“¦é™¤EEPROM
 extern int EraseEE(int Page, int Offset, int Size);
-//Ğ´EEPROM
+//å†™EEPROM
 extern int WriteEE(int* DataIn, int Page, int Offset, int Size);
 // Calculate qSin,qCos from iAngle
 extern void SinCos(void);     
@@ -54,17 +54,17 @@ extern void __attribute__((__interrupt__)) _U1RXInterrupt (void);
 extern void __attribute__((__interrupt__)) _U1TXInterrupt (void);
 
 
-//¶ÁEEP£¬ÉèÖÃPWMµ÷ÖÆÆµÂÊ
+//è¯»EEPï¼Œè®¾ç½®PWMè°ƒåˆ¶é¢‘ç‡
 extern void readEEP(void);
-//PWMÆô¶¯
+//PWMå¯åŠ¨
 extern void StarPWM(void);
-//PWMÍ£Ö¹
+//PWMåœæ­¢
 extern void StopPWM(void);
-//¶ÁEEPROM²¢ÉèÖÃ³ÌĞò³õÊ¼²ÎÊıÖµ£¬Æô¶¯³õÊ¼¹¦ÄÜµ¥Ôª
+//è¯»EEPROMå¹¶è®¾ç½®ç¨‹åºåˆå§‹å‚æ•°å€¼ï¼Œå¯åŠ¨åˆå§‹åŠŸèƒ½å•å…ƒ
 
-extern void IORead(void);		//¶ÁIO¿Ú×´Ì¬
-extern void IOCorp(void);		//IO¿Ú×´Ì¬´¦Àí
-extern void IOWrite(void);		//IO¿ÚÊä³ö
+extern void IORead(void);		//è¯»IOå£çŠ¶æ€
+extern void IOCorp(void);		//IOå£çŠ¶æ€å¤„ç†
+extern void IOWrite(void);		//IOå£è¾“å‡º
 extern void CurProtect(void);
 extern void Uart1Tx(void);
 extern void Uart2Tx(void);

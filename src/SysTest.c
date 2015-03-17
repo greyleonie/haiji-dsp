@@ -1,12 +1,12 @@
-//�����Ƽ���HJR3000����������������װ�ã�DSPIC30F6010Aϵͳ
-//�������ļ���T1_CTRL.c
+//海吉科技，HJR3000型智能软启动控制装置，DSPIC30F6010A系统
+//主控制文件，T1_CTRL.c
 
-//ͷ�ļ�
-#include "UserParms.h"	//�û�ϵͳ���ã��������弰����ֵ
-#include "Function.h"	//ϵͳ�ⲿ���ú����������ڲ����ú����ڶ�Ӧ�ļ�������
-#include "variable.h"	//ϵͳȫ�ֱ����������ֲ������ڶ�Ӧ�ļ�������
+//头文件
+#include "UserParms.h"	//用户系统配置，常数定义及配置值
+#include "Function.h"	//系统外部调用函数声明，内部调用函数在对应文件内声明
+#include "variable.h"	//系统全局变量声明，局部变量在对应文件内声明
 
-//ϵͳ����ģʽ
+//系统调试模式
 void SysTest(void)
 {
 	if(PORTGbits.RG6 == 0)

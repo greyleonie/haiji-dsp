@@ -1,53 +1,53 @@
-//º£¼ª¿Æ¼¼£¬HJR3000ĞÍÖÇÄÜÈíÆô¶¯¿ØÖÆ×°ÖÃ£¬DSPIC30F6010AÏµÍ³
-//ÓÃ»§ÏµÍ³ÅäÖÃ£¬³£Êı¶¨Òå¼°ÅäÖÃÖµ UserParms.h
+//æµ·å‰ç§‘æŠ€ï¼ŒHJR3000å‹æ™ºèƒ½è½¯å¯åŠ¨æ§åˆ¶è£…ç½®ï¼ŒDSPIC30F6010Aç³»ç»Ÿ
+//ç”¨æˆ·ç³»ç»Ÿé…ç½®ï¼Œå¸¸æ•°å®šä¹‰åŠé…ç½®å€¼ UserParms.h
 
 
 #ifndef UserParms_H
 #define UserParms_H
 
-//**************  Oscillator £¨¾§Õñ£© **************
-#define dFoscExt        7200000					// Íâ²¿¾§ÕñÆµÂÊ(Hz)
-#define dPLL            8						// PLL±¶Êı
-#define dTimer1         0.0025					// ¶¨Ê±Æ÷1ÖĞ¶ÏÊ±¼ä(s)
-#define dLoopTimeInSec 	0.000050 				// PWM ÖÜÆÚÊ±¼ä(s) - 50 uS, 20Khz PWM
-#define dDeadTimeSec 	0.0000002 				// ÒÔÃëÎªµ¥Î»µÄËÀÇøÊ±¼ä(s)
-//#define dBaudRate		9600					// ´®ĞĞÍ¨Ñ¶²¨ÌØÂÊ
-#define dI2CBaudRate	100000					// I2CÍ¨Ñ¶²¨ÌØÂÊ
+//**************  Oscillator ï¼ˆæ™¶æŒ¯ï¼‰ **************
+#define dFoscExt        7200000					// å¤–éƒ¨æ™¶æŒ¯é¢‘ç‡(Hz)
+#define dPLL            8						// PLLå€æ•°
+#define dTimer1         0.0025					// å®šæ—¶å™¨1ä¸­æ–­æ—¶é—´(s)
+#define dLoopTimeInSec 	0.000050 				// PWM å‘¨æœŸæ—¶é—´(s) - 50 uS, 20Khz PWM
+#define dDeadTimeSec 	0.0000002 				// ä»¥ç§’ä¸ºå•ä½çš„æ­»åŒºæ—¶é—´(s)
+//#define dBaudRate		9600					// ä¸²è¡Œé€šè®¯æ³¢ç‰¹ç‡
+#define dI2CBaudRate	100000					// I2Cé€šè®¯æ³¢ç‰¹ç‡
 
 
 //*************   Derived   *****************************
-#define dFosc       	(dFoscExt*dPLL)     					// ÄÚ²¿Ê±ÖÓÆµÂÊ					57600000
-#define dFcy        	(dFosc/4)           					// Ö¸ÁîÆµÂÊ						14400000
-#define dTcy        	(1.0/dFcy)          					// Ö¸ÁîÖÜÆÚÊ±¼ä					0.00000006944444444
-#define dTImer1Tcy  	(int)(dTimer1*dFcy) 					// ¶¨Ê±Æ÷1¼ÆÊıÖµ					36000	
-#define dLoopInTcy 		(int)(dLoopTimeInSec*dFcy) 				// ÒÔTcy Îªµ¥Î»µÄ»ù±¾Ñ­»·ÖÜÆÚ	720
-#define dDeadTime		(int)(dDeadTimeSec*dFcy)				// ÒÔdTcys Îªµ¥Î»µÄËÀÇøÊ±¼ä		28.8		
-//#define dBaudRateTcy	((dFcy/16/dBaudRate)-1)					// ´®ĞĞ²¨ÌØÂÊ¼Ä´æÆ÷µÄÖµ				92
-#define dI2CBaudRateTcy	((dFcy/dI2CBaudRate)-(dFcy/1111111)-1)		// I2C²¨ÌØÂÊ¼Ä´æÆ÷µÄÖµ				92
+#define dFosc       	(dFoscExt*dPLL)     					// å†…éƒ¨æ—¶é’Ÿé¢‘ç‡					57600000
+#define dFcy        	(dFosc/4)           					// æŒ‡ä»¤é¢‘ç‡						14400000
+#define dTcy        	(1.0/dFcy)          					// æŒ‡ä»¤å‘¨æœŸæ—¶é—´					0.00000006944444444
+#define dTImer1Tcy  	(int)(dTimer1*dFcy) 					// å®šæ—¶å™¨1è®¡æ•°å€¼					36000	
+#define dLoopInTcy 		(int)(dLoopTimeInSec*dFcy) 				// ä»¥Tcy ä¸ºå•ä½çš„åŸºæœ¬å¾ªç¯å‘¨æœŸ	720
+#define dDeadTime		(int)(dDeadTimeSec*dFcy)				// ä»¥dTcys ä¸ºå•ä½çš„æ­»åŒºæ—¶é—´		28.8		
+//#define dBaudRateTcy	((dFcy/16/dBaudRate)-1)					// ä¸²è¡Œæ³¢ç‰¹ç‡å¯„å­˜å™¨çš„å€¼				92
+#define dI2CBaudRateTcy	((dFcy/dI2CBaudRate)-(dFcy/1111111)-1)		// I2Cæ³¢ç‰¹ç‡å¯„å­˜å™¨çš„å€¼				92
 
 
 
-//****************** EEPROM ´æ´¢µ¥Ôª³£Êı ***********************
-#define 				WORD    		1						//EEPROM¶ÁĞ´²ÎÊı
+//****************** EEPROM å­˜å‚¨å•å…ƒå¸¸æ•° ***********************
+#define 				WORD    		1						//EEPROMè¯»å†™å‚æ•°
 #define 				ROW     		16
 #define 				ALL_EEPROM      0xFFFF
-#define 				ERROREE 		-1						//EEPROM¶ÁĞ´²ÎÊı±äÁ¿
+#define 				ERROREE 		-1						//EEPROMè¯»å†™å‚æ•°å˜é‡
 
 
 
 
-//************** ÏµÍ³²ÎÊı¶¨±êÏµÊı **************
+//************** ç³»ç»Ÿå‚æ•°å®šæ ‡ç³»æ•° **************
 
-#define		SinTimeBy2		0.01								//ÕıÏÒ°ë²¨10mS
-#define		DataGeiMax		(SinTimeBy2 / dLoopTimeInSec)		//ÕıÏÒ°ë²¨10mS,µÄPWMÖĞ¶Ï´ÎÊı
-#define		TimeMax			99.9000								//Ê±¼ä²ÎÊı¸ø¶¨×î´óÖµ Ê±¼äµ¥Î»
-#define		dwLoop			1000.0								//¸ø¶¨»ù±¾²½³¤ ¼ÓËÙ¶È
-#define		dwT1			400									//T1¶¨Ê±Æ÷µÄµ¹Êı£¬±ãÓÚ³ÌĞòÔËËã  1/0.0025=400
-#define		IntTimeS		(TimeMax * dwT1)					//×î´óÊ±¼äÄÚµÄÖĞ¶Ï´ÎÊı  99.9/0.0025=39960
-#define		dwIntTimeS		(IntTimeS / (TimeMax * 10.0))		//µ¥Î»¸ø¶¨Ê±¼äÄÚµÄÖĞ¶Ï´ÎÊı  39960/(99.9*10)=40
-#define		DataMax			(IntTimeS * dwLoop)					//Êı¾İ×î´óÖµ  39960*1000=39960000
-#define		DataMaxLoop		(DataMax / dwIntTimeS)				//µ¥Î»¸ø¶¨Ê±¼äÄÚµÄÔöÁ¿ 39960000/40=999000
-#define		dqDataGei		(DataMax / DataGeiMax)				//¶¨±ê×ª»»ÏµÊı
+#define		SinTimeBy2		0.01								//æ­£å¼¦åŠæ³¢10mS
+#define		DataGeiMax		(SinTimeBy2 / dLoopTimeInSec)		//æ­£å¼¦åŠæ³¢10mS,çš„PWMä¸­æ–­æ¬¡æ•°
+#define		TimeMax			99.9000								//æ—¶é—´å‚æ•°ç»™å®šæœ€å¤§å€¼ æ—¶é—´å•ä½
+#define		dwLoop			1000.0								//ç»™å®šåŸºæœ¬æ­¥é•¿ åŠ é€Ÿåº¦
+#define		dwT1			400									//T1å®šæ—¶å™¨çš„å€’æ•°ï¼Œä¾¿äºç¨‹åºè¿ç®—  1/0.0025=400
+#define		IntTimeS		(TimeMax * dwT1)					//æœ€å¤§æ—¶é—´å†…çš„ä¸­æ–­æ¬¡æ•°  99.9/0.0025=39960
+#define		dwIntTimeS		(IntTimeS / (TimeMax * 10.0))		//å•ä½ç»™å®šæ—¶é—´å†…çš„ä¸­æ–­æ¬¡æ•°  39960/(99.9*10)=40
+#define		DataMax			(IntTimeS * dwLoop)					//æ•°æ®æœ€å¤§å€¼  39960*1000=39960000
+#define		DataMaxLoop		(DataMax / dwIntTimeS)				//å•ä½ç»™å®šæ—¶é—´å†…çš„å¢é‡ 39960000/40=999000
+#define		dqDataGei		(DataMax / DataGeiMax)				//å®šæ ‡è½¬æ¢ç³»æ•°
 #define		ActiveTime		0.000009
 #define		ActivePWM		(ActiveTime * 2 / dTcy)
 #define		ActiveLongAngle 75.0
@@ -62,12 +62,12 @@
 
 
 
-//************** ÊıÑ§³£Êı1.15¸ñÊ½ **************
+//************** æ•°å­¦å¸¸æ•°1.15æ ¼å¼ **************
 #define		PI				0x7FFF
 #define		Sq3By2			0x6ED9
 #define		OneBySq3		0x49E7
 
-//************** °æ±¾ĞÅÏ¢ **************
+//************** ç‰ˆæœ¬ä¿¡æ¯ **************
 #define		VerDateYear			6		// 2006
 #define		VerSoft				100		// 1.00
 #define		VerGTO				2000	// 2000A

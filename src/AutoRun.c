@@ -1,10 +1,10 @@
-//º£¼ª¿Æ¼¼£¬HJR3000ĞÍÖÇÄÜÈíÆô¶¯¿ØÖÆ×°ÖÃ£¬DSPIC30F6010AÏµÍ³
-//²¢Áª´®ĞĞÍ¨Ñ¶³ÌĞò Uart1.c
+//æµ·å‰ç§‘æŠ€ï¼ŒHJR3000å‹æ™ºèƒ½è½¯å¯åŠ¨æ§åˆ¶è£…ç½®ï¼ŒDSPIC30F6010Aç³»ç»Ÿ
+//å¹¶è”ä¸²è¡Œé€šè®¯ç¨‹åº Uart1.c
 
-//Í·ÎÄ¼ş
-#include "UserParms.h"	//ÓÃ»§ÏµÍ³ÅäÖÃ£¬³£Êı¶¨Òå¼°ÅäÖÃÖµ
-#include "Function.h"	//ÏµÍ³Íâ²¿µ÷ÓÃº¯ÊıÉùÃ÷£¬ÄÚ²¿µ÷ÓÃº¯ÊıÔÚ¶ÔÓ¦ÎÄ¼şÄÚÉùÃ÷
-#include "variable.h"	//ÏµÍ³È«¾Ö±äÁ¿ÉùÃ÷£¬¾Ö²¿±äÁ¿ÔÚ¶ÔÓ¦ÎÄ¼şÄÚÉùÃ÷
+//å¤´æ–‡ä»¶
+#include "UserParms.h"	//ç”¨æˆ·ç³»ç»Ÿé…ç½®ï¼Œå¸¸æ•°å®šä¹‰åŠé…ç½®å€¼
+#include "Function.h"	//ç³»ç»Ÿå¤–éƒ¨è°ƒç”¨å‡½æ•°å£°æ˜ï¼Œå†…éƒ¨è°ƒç”¨å‡½æ•°åœ¨å¯¹åº”æ–‡ä»¶å†…å£°æ˜
+#include "variable.h"	//ç³»ç»Ÿå…¨å±€å˜é‡å£°æ˜ï¼Œå±€éƒ¨å˜é‡åœ¨å¯¹åº”æ–‡ä»¶å†…å£°æ˜
 
 static int AX_int_AutoRun = 0;
 static int BX_int_AutoRun = 0;
@@ -832,7 +832,7 @@ void AutoRun(void)
 				if(InputState.RunPrePare == 1)
 				{
 					AutoRunParm.PrepareEnumerate += 1;
-					if( AutoRunParm.PrepareEnumerate > 1000)	//×¼±¸±Õ»·ÑÓÊ±Ê±¼ä
+					if( AutoRunParm.PrepareEnumerate > 1000)	//å‡†å¤‡é—­ç¯å»¶æ—¶æ—¶é—´
 					{
 						RunState.Run = 1;
 						AutoRunParm.PrepareEnumerate = 0;
@@ -910,9 +910,9 @@ void AutoRun(void)
 		OutputState.Run = 0;
 	}
 	
-	IOWrite();						//IO¿ÚÊä³ö
-	IORead();						//¶ÁIO¿Ú×´Ì¬
-	IOCorp();						//IO¿Ú×´Ì¬´¦Àí
+	IOWrite();						//IOå£è¾“å‡º
+	IORead();						//è¯»IOå£çŠ¶æ€
+	IOCorp();						//IOå£çŠ¶æ€å¤„ç†
 	
 }
 

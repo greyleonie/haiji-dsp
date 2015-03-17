@@ -1,10 +1,10 @@
-//º£¼ª¿Æ¼¼£¬HJR3000ĞÍÖÇÄÜÈíÆô¶¯¿ØÖÆ×°ÖÃ£¬DSPIC30F6010AÏµÍ³
-//½Ó¿Ú´®ĞĞÍ¨Ñ¶³ÌĞò Uart2.c
+//æµ·å‰ç§‘æŠ€ï¼ŒHJR3000å‹æ™ºèƒ½è½¯å¯åŠ¨æ§åˆ¶è£…ç½®ï¼ŒDSPIC30F6010Aç³»ç»Ÿ
+//æ¥å£ä¸²è¡Œé€šè®¯ç¨‹åº Uart2.c
 
-//Í·ÎÄ¼ş
-#include "UserParms.h"	//ÓÃ»§ÏµÍ³ÅäÖÃ£¬³£Êı¶¨Òå¼°ÅäÖÃÖµ
-#include "Function.h"	//ÏµÍ³Íâ²¿µ÷ÓÃº¯ÊıÉùÃ÷£¬ÄÚ²¿µ÷ÓÃº¯ÊıÔÚ¶ÔÓ¦ÎÄ¼şÄÚÉùÃ÷
-#include "variable.h"	//ÏµÍ³È«¾Ö±äÁ¿ÉùÃ÷£¬¾Ö²¿±äÁ¿ÔÚ¶ÔÓ¦ÎÄ¼şÄÚÉùÃ÷
+//å¤´æ–‡ä»¶
+#include "UserParms.h"	//ç”¨æˆ·ç³»ç»Ÿé…ç½®ï¼Œå¸¸æ•°å®šä¹‰åŠé…ç½®å€¼
+#include "Function.h"	//ç³»ç»Ÿå¤–éƒ¨è°ƒç”¨å‡½æ•°å£°æ˜ï¼Œå†…éƒ¨è°ƒç”¨å‡½æ•°åœ¨å¯¹åº”æ–‡ä»¶å†…å£°æ˜
+#include "variable.h"	//ç³»ç»Ÿå…¨å±€å˜é‡å£°æ˜ï¼Œå±€éƒ¨å˜é‡åœ¨å¯¹åº”æ–‡ä»¶å†…å£°æ˜
 
 void UartCRC(unsigned int DataCRC);
 
@@ -54,7 +54,7 @@ void __attribute__((__interrupt__)) _U2RXInterrupt (void)
 		Uart2Parm.HighCRC = Uart2Parm.HighCRC + Uart2Parm.LowCRC;	
 		Uart2Parm.RxTimes = 0;
 		if(Uart2Parm.HighCRC == Uart2Parm.UartCRC)
-			MainState.UartRx = 1;	//³É¹¦½ÓÊÕµ½¶ÁÃüÁî£¬ĞèÒª·¢ËÍÏìÓ¦Êı¾İ
+			MainState.UartRx = 1;	//æˆåŠŸæ¥æ”¶åˆ°è¯»å‘½ä»¤ï¼Œéœ€è¦å‘é€å“åº”æ•°æ®
 	}else if(Uart2Parm.RxTimes == 20)
 	{
 		if(Uart2Parm.RxCurData == 0)
@@ -146,49 +146,49 @@ void __attribute__((__interrupt__)) _U2TXInterrupt (void)
 
 void Uart2Tx(void)
 {
-	//ÅĞ¶ÏÏµÍ³ÊÇ·ñ´¦ÓÚµÈ´ıUART·¢ËÍ½áÊøµÄ×´Ì¬
+	//åˆ¤æ–­ç³»ç»Ÿæ˜¯å¦å¤„äºç­‰å¾…UARTå‘é€ç»“æŸçš„çŠ¶æ€
 	if(MainState.UartTxOff == 1)	
 	{
-		//¼ì²éUART2·¢ËÍ½áÊø±êÖ¾ÊÇ·ñÖÃ1
+		//æ£€æŸ¥UART2å‘é€ç»“æŸæ ‡å¿—æ˜¯å¦ç½®1
 		if(U2STAbits.TRMT == 1)		
 		{
-			//ÏµÍ³ÍË³öµÈ´ıUART·¢ËÍ½áÊøµÄ×´Ì¬
+			//ç³»ç»Ÿé€€å‡ºç­‰å¾…UARTå‘é€ç»“æŸçš„çŠ¶æ€
 			MainState.UartTxOff = 0;	
 			
 		}
 	}else
 	{	
-		//ÏµÍ³´¦ÓÚÎ´·¢ËÍ×´Ì¬£¬¼ì²éUARTÊı¾İ·¢ËÍÊÇ·ñ¿ªÊ¼
+		//ç³»ç»Ÿå¤„äºæœªå‘é€çŠ¶æ€ï¼Œæ£€æŸ¥UARTæ•°æ®å‘é€æ˜¯å¦å¼€å§‹
 		if(MainState.UartTxOn == 1)
 		{
-			//UARTÊı¾İ¿ªÊ¼·¢ËÍ£¬Êı¾İ·¢ËÍ½áÊø¼ì²é±êÖ¾ÖÃ1
+			//UARTæ•°æ®å¼€å§‹å‘é€ï¼Œæ•°æ®å‘é€ç»“æŸæ£€æŸ¥æ ‡å¿—ç½®1
 			MainState.UartTxOff = 1;
-			//Çå³ıÅĞ¶Ï±êÖ¾
+			//æ¸…é™¤åˆ¤æ–­æ ‡å¿—
 			MainState.UartTxOn = 0;
-			//½«Êı¾İĞ´ÈëUART·¢ËÍ¼Ä´æÆ÷
+			//å°†æ•°æ®å†™å…¥UARTå‘é€å¯„å­˜å™¨
 			Uart2Parm.TxTimes = 0;
 			Uart2Parm.TxCurData = Uart2Parm.TxData[Uart2Parm.TxTimes];
 			U2TXREG = Uart2Parm.TxCurData;
 					
 		}else
 		{
-			//¼ì²éÊÇ·ñÓĞÊı¾İĞèÒªÍ¨¹ıUART·¢ËÍ
+			//æ£€æŸ¥æ˜¯å¦æœ‰æ•°æ®éœ€è¦é€šè¿‡UARTå‘é€
 			if(MainState.UartTx == 1)
 			{
-				//Çå¿ÕÅĞ¶Ï±êÖ¾Î»
+				//æ¸…ç©ºåˆ¤æ–­æ ‡å¿—ä½
 			    MainState.UartTx = 0;
-				//Í¨ÓÃ¶Ë¿ÚF0ÖÃ1
+				//é€šç”¨ç«¯å£F0ç½®1
 				LATFbits.LATF0 = 1;
-				//¿ªÆôUARTÊı¾İ·¢ËÍ
+				//å¼€å¯UARTæ•°æ®å‘é€
 				MainState.UartTxOn = 1;
 			}else
 			{
-				//Í¨ÓÃ¶Ë¿ÚF0ÖÃ0
+				//é€šç”¨ç«¯å£F0ç½®0
 				LATFbits.LATF0 = 0;
 			}
 		}
 	}
-	//¼ì²éÊÇ·ñĞèÒª·¢ËÍÏìÓ¦Êı¾İ
+	//æ£€æŸ¥æ˜¯å¦éœ€è¦å‘é€å“åº”æ•°æ®
 	if(MainState.UartRx == 1)
 	{
 		MainState.UartRx = 0;
@@ -233,7 +233,7 @@ void Uart2Tx(void)
 		}else if(Uart2Parm.DataAddrL == 0x0007)
 		{
 			Uart2Parm.TxData[3] = ErrorParm.EndError & 0x00FF;
-			Uart2Parm.TxData[2] = (ErrorParm.EndError & 0x8F00) >> 8;                   //Í¨Ñ¶ÆÁ±Î¶ÏÏà   2014.4.14    0XFF00¸ÄÎª0X8F00
+			Uart2Parm.TxData[2] = (ErrorParm.EndError & 0x8F00) >> 8;                   //é€šè®¯å±è”½æ–­ç›¸   2014.4.14    0XFF00æ”¹ä¸º0X8F00
 			MainState.UartTx = 1;
 		}else if(Uart2Parm.DataAddrL == 0x0008)
 		{
