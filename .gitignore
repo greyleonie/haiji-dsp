@@ -1,7 +1,5 @@
-*.mcp
 *.mcs
-*.mcw
 *.mptags
 *.tagsrc
 obj/
-output/
+out/
