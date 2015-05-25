@@ -1,11 +1,13 @@
 //海吉科技，HJR3000型智能软启动控制装置，DSPIC30F6010A系统
 //接口串行通讯程序 Uart2.c
 
-//头文件
-#include "UserParms.h"	//用户系统配置，常数定义及配置值
-#include "Function.h"	//系统外部调用函数声明，内部调用函数在对应文件内声明
-#include "variable.h"	//系统全局变量声明，局部变量在对应文件内声明
+//头文�?
+#include "UserParms.h"	//用户系统配置，常数定义及配置�?
+#include "Function.h"	//系统外部调用函数声明，内部调用函数在对应文件内声�?
+#include "variable.h"	//系统全局变量声明，局部变量在对应文件内声�?
 
+extern void modbus_receive(unsigned char c);
+extern void modbus_slave(void);
 void UartCRC(unsigned int DataCRC);
 
 unsigned int AX_int_Uart = 0, BX_int_Uart = 0;
@@ -14,6 +16,8 @@ unsigned char AX_char_Uart = 0,BX_char_Uart = 0;
 void __attribute__((__interrupt__)) _U2RXInterrupt (void)
 {
 	Uart2Parm.RxCurData = U2RXREG;
+	modbus_receive(Uart2Parm.RxCurData);
+/*
 	if(Uart2Parm.RxTimes == 0)
 	{
 		if(Uart2Parm.RxCurData == Uart2Parm.Addr)
@@ -53,8 +57,8 @@ void __attribute__((__interrupt__)) _U2RXInterrupt (void)
 		Uart2Parm.HighCRC = Uart2Parm.HighCRC << 8;
 		Uart2Parm.HighCRC = Uart2Parm.HighCRC + Uart2Parm.LowCRC;	
 		Uart2Parm.RxTimes = 0;
-		if(Uart2Parm.HighCRC == Uart2Parm.UartCRC)
-			MainState.UartRx = 1;	//成功接收到读命令，需要发送响应数据
+	//	if(Uart2Parm.HighCRC == Uart2Parm.UartCRC)
+			MainState.UartRx = 1;	//成功接收到读命令，需要发送响应数�?
 	}else if(Uart2Parm.RxTimes == 20)
 	{
 		if(Uart2Parm.RxCurData == 0)
@@ -100,7 +104,7 @@ void __attribute__((__interrupt__)) _U2RXInterrupt (void)
 		Uart2Parm.RxTimes = 0;
 	}
 		
-	
+//*/	
 	
 	IFS1bits.U2RXIF = 0;
 	return;
@@ -136,7 +140,7 @@ void __attribute__((__interrupt__)) _U2TXInterrupt (void)
 		Uart2Parm.TxCurData = Uart2Parm.TxData[Uart2Parm.TxTimes];
 		U2TXREG = Uart2Parm.TxCurData;
 	}else Uart2Parm.TxTimes = 250;
-	
+//*/	
 	
 	IFS1bits.U2TXIF = 0;
 	return;
@@ -146,19 +150,20 @@ void __attribute__((__interrupt__)) _U2TXInterrupt (void)
 
 void Uart2Tx(void)
 {
-	//判断系统是否处于等待UART发送结束的状态
+	modbus_slave();
+	//判断系统是否处于等待UART发送结束的状�?
 	if(MainState.UartTxOff == 1)	
 	{
 		//检查UART2发送结束标志是否置1
 		if(U2STAbits.TRMT == 1)		
 		{
-			//系统退出等待UART发送结束的状态
+			//系统退出等待UART发送结束的状�?
 			MainState.UartTxOff = 0;	
 			
 		}
 	}else
 	{	
-		//系统处于未发送状态，检查UART数据发送是否开始
+		//系统处于未发送状态，检查UART数据发送是否开�?
 		if(MainState.UartTxOn == 1)
 		{
 			//UART数据开始发送，数据发送结束检查标志置1
@@ -172,23 +177,23 @@ void Uart2Tx(void)
 					
 		}else
 		{
-			//检查是否有数据需要通过UART发送
+			//检查是否有数据需要通过UART发�?
 			if(MainState.UartTx == 1)
 			{
-				//清空判断标志位
+				//清空判断标志�?
 			    MainState.UartTx = 0;
-				//通用端口F0置1
+				//通用端口F0�?
 				LATFbits.LATF0 = 1;
-				//开启UART数据发送
+				//开启UART数据发�?
 				MainState.UartTxOn = 1;
 			}else
 			{
-				//通用端口F0置0
+				//通用端口F0�?
 				LATFbits.LATF0 = 0;
 			}
 		}
 	}
-	//检查是否需要发送响应数据
+	//检查是否需要发送响应数�?
 	if(MainState.UartRx == 1)
 	{
 		MainState.UartRx = 0;
@@ -598,4 +603,9 @@ void UartCRC(unsigned int DataCRC)
 			Uart2Parm.UartCRC = Uart2Parm.UartCRC ^ 0xA001;
 		}
 	}
+}
+
+void Uart2TxStart(unsigned char c)
+{
+	U2TXREG = c;
 }

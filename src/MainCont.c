@@ -1,15 +1,14 @@
 //海吉科技，HJR3000型智能软启动控制装置，DSPIC30F6010A系统
 //主文件，MainCont.c
 
-//头文件
-#include "UserParms.h"	//用户系统配置，常数定义及配置值
-#include "Function.h"	//系统外部调用函数声明，内部调用函数在对应文件内声明
-#include "variable.h"	//系统全局变量声明，局部变量在对应文件内声明
+//头文�?
+#include "UserParms.h"	//用户系统配置，常数定义及配置�?
+#include "Function.h"	//系统外部调用函数声明，内部调用函数在对应文件内声�?
+#include "variable.h"	//系统全局变量声明，局部变量在对应文件内声�?
 
-
-tSinCosParms SinCosParms;			//查SinCos表参数
+tSinCosParms SinCosParms;			//查SinCos表参�?
 tPWMParams PWMParams;				//PWM参数变量结构
-tRunState RunState;						//系统运行状态标志，位变量结构
+tRunState RunState;						//系统运行状态标志，位变量结�?
 tKeyParm KeyParm;  
 tCurParms CurParms;
 tVolParms VolParms;
@@ -39,7 +38,7 @@ tSysTestState SysTestState;
 unsigned int Dsp_State_Start=0;
 
  
-//键盘设定参数EEPROM存储数组，64个参数
+//键盘设定参数EEPROM存储数组�?4个参�?
 unsigned int _EEDATA(128) EPConfigS[128]={
 							220,210,205,200,  195,190,185,180,		
 							240,300,270,160,  280,130,1,0,			//运行参数
@@ -76,11 +75,12 @@ unsigned int _EEDATA(16) EPErrorSaveUin[16];
 
 int AX_int_Mian = 0;
 int BX_int_Main = 0;
+extern int modbus_init(unsigned char adr);
 
-//***********************************主程序 ***********************************************************//
+//***********************************主程�?***********************************************************//
 int main(void)
 {
-//读EEP，配置系统参数
+//读EEP，配置系统参�?
 	SysConfig();
 //初始化各端口
     SetupPorts();	
@@ -90,7 +90,7 @@ int main(void)
     InitPWM();
 //初始化AD
     InitAD();
-//初始化捕获单元	
+//初始化捕获单�?
 	InitIC();
 //初始化串行通讯1
 	InitUART1();
@@ -100,15 +100,15 @@ int main(void)
 	InitI2C();
 //初始化CN
 //	InitCN();
-//输出比较初始化
+//输出比较初始�?
 	InitOC();
 
 //读EEPROM并设置程序初始参数值，启动初始功能单元
     StateInit();
      
-
+	modbus_init(0x01);
     
-	while(1)//主循环
+	while(1)//主循�?
     {
 	    
 	    if(I2CSTATbits.I2COV == 1)
@@ -182,7 +182,7 @@ int main(void)
 							AutoRunParm.OutputState = AutoRunParm.OutputState & 0xFFF3;
 							OutputState.Normal = 0;
 							OutputState.Backup = 0;
-							IFS2bits.FLTAIF = 0;   //只清除一次过流故障中断 
+							IFS2bits.FLTAIF = 0;   //只清除一次过流故障中�?
 							IEC2bits.FLTAIE = 1;    //使能FLTA故障中断
 			
 						}
@@ -207,7 +207,7 @@ int main(void)
 			
 		}
 		
-			
+	//*/			
  				
 	}  
 }	//end of main()
