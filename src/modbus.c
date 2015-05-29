@@ -1,6 +1,8 @@
 #include "modbus.h"
 
 extern void Uart2TxStart(unsigned char c);
+extern void timer4_reset(void);
+extern void timer4_stop(void);
 
 modbus mb;
 
@@ -17,6 +19,7 @@ int modbus_init(unsigned char adr)
 
 void modbus_receive(unsigned char c)
 {
+	timer4_reset();
 	switch (mb.state) {
 		case MODBUS_ST_RECV_IDLE:
 			if (c == mb.adr || c == 0) {
@@ -165,6 +168,7 @@ void modbus_receive(unsigned char c)
 				((unsigned char *)&mb.request.crc)[LOW] = c;
 				mb.recv_cnt = 0;
 				mb.state = MODBUS_ST_MAKE_RESPONSE;
+				timer4_stop();
 			}
 			break;
 	
@@ -231,4 +235,9 @@ char modbus_send(void)
 char modbus_is_send_done(void)
 {
 	return (mb.send_cnt == mb.response.length);
+}
+
+void modbus_reset(void)
+{
+	mb.state = MODBUS_ST_RECV_IDLE;
 }

@@ -163,6 +163,7 @@ extern void modbus_receive(unsigned char c);
 extern void modbus_slave(void);
 extern char modbus_is_send_done(void);
 extern char modbus_send(void);
+extern void modbus_reset(void);
 
 
 #define HIGH	1

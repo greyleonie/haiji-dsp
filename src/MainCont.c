@@ -76,7 +76,7 @@ unsigned int _EEDATA(16) EPErrorSaveUin[16];
 int AX_int_Mian = 0;
 int BX_int_Main = 0;
 extern int modbus_init(unsigned char adr);
-
+extern void timer4_init(void);
 //***********************************主程�?***********************************************************//
 int main(void)
 {
@@ -105,7 +105,7 @@ int main(void)
 
 //读EEPROM并设置程序初始参数值，启动初始功能单元
     StateInit();
-     
+    timer4_init(); 
 	modbus_init(0x01);
     
 	while(1)//主循�?
