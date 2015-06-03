@@ -3,6 +3,7 @@
 extern void Uart2TxStart(unsigned char c);
 extern void timer4_reset(void);
 extern void timer4_stop(void);
+extern void CRC16_for_char(unsigned short *crc, unsigned char c);
 
 modbus mb;
 
@@ -25,6 +26,8 @@ void modbus_receive(unsigned char c)
 			if (c == mb.adr || c == 0) {
 				mb.request.adr = c;
 				mb.state = MODBUS_ST_RECV_FUNCTION;
+				mb.crc = 0xFFFF;
+				CRC16_for_char(&mb.crc, c);
 			}
 			break;
 
@@ -41,6 +44,7 @@ void modbus_receive(unsigned char c)
 				mb.request.function = c;
 				mb.recv_cnt = 0;
 				mb.state = MODBUS_ST_RECV_DATA;
+				CRC16_for_char(&mb.crc, c);
 			} else {
 				//start timer 
 				mb.state = MODBUS_ST_EXCEPTION;
@@ -158,6 +162,7 @@ void modbus_receive(unsigned char c)
 				default:
 					break;
 			} // end switch (mb.function)
+			CRC16_for_char(&mb.crc, c);
 			break;
 			
 		case MODBUS_ST_RECV_CRC:
@@ -186,7 +191,7 @@ void modbus_slave(void)
 	switch (mb.state) {
 		case MODBUS_ST_MAKE_RESPONSE:
 			//check request
-			if (1) {
+			if (mb.crc == mb.request.crc) {
 				// make response packet
 			
 
