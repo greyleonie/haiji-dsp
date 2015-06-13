@@ -1,14 +1,23 @@
 #include "modbus.h"
 
+
 extern void Uart2TxStart(unsigned char c);
 extern void timer4_reset(void);
 extern void timer4_stop(void);
 extern void CRC16_for_char(unsigned short *crc, unsigned char c);
-
+extern unsigned short CRC16(unsigned char *p, unsigned short len);
+extern void modbus_map_init(void);
+extern unsigned short modbus_rd_reg(int addr);
+extern void modbus_wr_reg(int addr, unsigned short val);
+extern void modbus_rd_regs(unsigned char *dst, int start_addr, int cnt);
+extern void modbus_wr_regs(unsigned short *src, int start_addr, int cnt);
+ 
 modbus mb;
+
 
 int modbus_init(unsigned char adr)
 {
+	modbus_map_init();
 	if (adr >= 1 && adr <= MODBUS_MAX_NODE_ADDRESS) {
 		mb.adr = adr;
 		mb.state = MODBUS_ST_RECV_IDLE;
@@ -186,6 +195,39 @@ void modbus_receive(unsigned char c)
 	}// end switch
 }
 
+
+void modbus_read_registers(void)
+{
+	unsigned short crc;
+	unsigned char cnt = (mb.request.data.read_single.count << 1) & 0x00FF;
+
+	mb.response.data[0] = mb.adr;
+	mb.response.data[1] = mb.request.function;
+
+	mb.response.data[2] = cnt;
+	modbus_rd_regs(&mb.response.data[3], 
+					mb.request.data.read_single.address, 
+					mb.request.data.read_single.count);	
+	
+	crc = CRC16(&mb.response.data[0], cnt + 3);	
+	mb.response.data[cnt + 3] = crc & 0x00FF;
+	mb.response.data[cnt + 4] = (crc & 0xFF00) >> 8;
+
+	mb.response.length = cnt + 5;
+}
+
+
+
+char modbus_send(void)
+{
+	char c = mb.response.data[mb.send_cnt];
+	mb.send_cnt++;
+	if (mb.send_cnt == mb.response.length)
+		mb.state = MODBUS_ST_SEND_DONE;
+	return c;
+}
+
+
 void modbus_slave(void)
 {
 	switch (mb.state) {
@@ -193,10 +235,19 @@ void modbus_slave(void)
 			//check request
 			if (mb.crc == mb.request.crc) {
 				// make response packet
-			
+				switch (mb.request.function) {
+					case MODBUS_FC_READ_HOLDING_REGISTERS:
+					case MODBUS_FC_READ_INPUT_REGISTERS:
+						modbus_read_registers();
+						break;
+
+					default:
+						break;
+
+				}// end switch (mb.mb.request.function) 
 
 				mb.send_cnt = 0;
-				//Uart2TxStart(modbus_send());
+				Uart2TxStart(modbus_send());
 				mb.state = MODBUS_ST_SEND_RESPONSE;
 			} else {
 				mb.state = MODBUS_ST_RECV_IDLE;
@@ -215,11 +266,11 @@ void modbus_slave(void)
 		case MODBUS_ST_SEND_RESPONSE:
 		case MODBUS_ST_SEND_EXCEPTION:
 			//wait send done
-			mb.state = MODBUS_ST_SEND_DONE;
+			//mb.state = MODBUS_ST_SEND_DONE;
 			break;
 		
 		case MODBUS_ST_SEND_DONE:
-			mb.send_cnt = 0;
+			//mb.send_cnt = 0;
 			mb.state = MODBUS_ST_RECV_IDLE;
 			break;
 	
@@ -228,14 +279,6 @@ void modbus_slave(void)
 	}// end switch
 }
 
-char modbus_send(void)
-{
-	char c = mb.response.data[mb.send_cnt];
-	mb.send_cnt++;
-	if (mb.send_cnt == mb.response.length)
-		mb.state = MODBUS_ST_SEND_DONE;
-	return c;
-}
 
 char modbus_is_send_done(void)
 {
@@ -246,3 +289,4 @@ void modbus_reset(void)
 {
 	mb.state = MODBUS_ST_RECV_IDLE;
 }
+

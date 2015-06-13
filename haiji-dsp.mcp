@@ -49,6 +49,7 @@ file_021=.
 file_022=.
 file_023=.
 file_024=.
+file_025=.
 [GENERATED_FILES]
 file_000=no
 file_001=no
@@ -75,6 +76,7 @@ file_021=no
 file_022=no
 file_023=no
 file_024=no
+file_025=no
 [OTHER_FILES]
 file_000=no
 file_001=no
@@ -101,6 +103,7 @@ file_021=no
 file_022=no
 file_023=no
 file_024=no
+file_025=no
 [FILE_INFO]
 file_000=src\ADInterrupt.c
 file_001=src\AutoRun.c
@@ -120,13 +123,14 @@ file_014=src\Uart2.c
 file_015=src\modbus.c
 file_016=src\timer4.c
 file_017=src\crc.c
-file_018=h\Function.h
-file_019=h\p30f6010A.h
-file_020=h\p30f6010A.inc
-file_021=h\UserParms.h
-file_022=h\variable.h
-file_023=h\modbus.h
-file_024=gld\p30f6010A.gld
+file_018=src\modbus_reg.c
+file_019=h\Function.h
+file_020=h\p30f6010A.h
+file_021=h\p30f6010A.inc
+file_022=h\UserParms.h
+file_023=h\variable.h
+file_024=h\modbus.h
+file_025=gld\p30f6010A.gld
 [SUITE_INFO]
 suite_guid={479DDE59-4D56-455E-855E-FFF59A3DB57E}
 suite_state=

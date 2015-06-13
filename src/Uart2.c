@@ -8,6 +8,8 @@
 
 extern void modbus_receive(unsigned char c);
 extern void modbus_slave(void);
+extern char modbus_send();
+extern char modbus_is_send_done(void);
 void UartCRC(unsigned int DataCRC);
 
 unsigned int AX_int_Uart = 0, BX_int_Uart = 0;
@@ -113,6 +115,9 @@ void __attribute__((__interrupt__)) _U2RXInterrupt (void)
 
 void __attribute__((__interrupt__)) _U2TXInterrupt (void)
 {
+	if (!modbus_is_send_done())
+		U2TXREG = modbus_send();
+/*
 	if(Uart2Parm.TxTimes == 0)
 	{
 		Uart2Parm.TxTimes = 1;
@@ -194,7 +199,7 @@ void Uart2Tx(void)
 		}
 	}
 	//检查是否需要发送响应数�?
-	if(MainState.UartRx == 1)
+/*	if(MainState.UartRx == 1)
 	{
 		MainState.UartRx = 0;
 		Uart2Parm.TxData[0] = Uart2Parm.Addr;
@@ -586,7 +591,7 @@ void Uart2Tx(void)
 		
 	}	
 			
-				
+//*/				
 }
 
 void UartCRC(unsigned int DataCRC)

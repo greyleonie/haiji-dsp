@@ -158,7 +158,6 @@ typedef struct _modbus {
 
 } modbus;
 
-
 /* define functions */
 extern int modbus_init(unsigned char adr);
 extern void modbus_receive(unsigned char c);
@@ -170,5 +169,6 @@ extern void modbus_reset(void);
 
 #define HIGH	1
 #define	LOW		0
+
 
 #endif
