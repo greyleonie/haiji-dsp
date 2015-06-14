@@ -1,14 +1,14 @@
 //海吉科技，HJR3000型智能软启动控制装置，DSPIC30F6010A系统
 //系统初始化函数，init4011.c
 
-//头文件
-#include "UserParms.h"	//用户系统配置，常数定义及配置值
-#include "Function.h"	//系统外部调用函数声明，内部调用函数在对应文件内声明
-#include "variable.h"	//系统全局变量声明，局部变量在对应文件内声明
+//头文�?
+#include "UserParms.h"	//用户系统配置，常数定义及配置�?
+#include "Function.h"	//系统外部调用函数声明，内部调用函数在对应文件内声�?
+#include "variable.h"	//系统全局变量声明，局部变量在对应文件内声�?
 
 int AX_int_Init = 0;
 
-//读EEP，配置系统参数
+//读EEP，配置系统参�?
 void SysConfig(void)
 {
 	//读串口波特率单元，KeyParm.SaveParms[0x1B]
@@ -47,7 +47,7 @@ void StateInit(void)
 {
 	unsigned int i = 0;
 	
-	//************* 读运行参数 ******************
+	//************* 读运行参�?******************
 	for(i = 0; i < 128; i ++)
     {
     	EEPROMADDR = 0xF000 + 2 * i;
@@ -76,7 +76,7 @@ void StateInit(void)
 
 	}
 	
-//************* 计算参数值 ******************
+//************* 计算参数�?******************
 	//可编程IO输入
 	if(KeyParm.SaveParms[0x40]>18)
 		KeyParm.SaveParms[0x40]=18;
@@ -507,14 +507,14 @@ void StateInit(void)
 	else if(KeyParm.SaveParms[0x36] > 100)
 		KeyParm.SaveParms[0x36] = 40;
 	AX_int_Init = 100 - KeyParm.SaveParms[0x36];
-	SoftRunParms.SoftStopStartData = ( (long) DataMax  / 100 ) * AX_int_Init;		//软停机初始电压
+	SoftRunParms.SoftStopStartData = ( (long) DataMax  / 100 ) * AX_int_Init;		//软停机初始电�?
 	SoftRunParms.SoftStopEndData = ( (long) DataMax  / 100 ) * 70;
 	
 	if(KeyParm.SaveParms[0x37] < 1)
 		KeyParm.SaveParms[0x37] = 10;
 	else if(KeyParm.SaveParms[0x37] > 999)
 		KeyParm.SaveParms[0x37] = 10;
-	SoftRunParms.SoftStopLoopData = DataMaxLoop / KeyParm.SaveParms[0x37];			//软停机步长
+	SoftRunParms.SoftStopLoopData = DataMaxLoop / KeyParm.SaveParms[0x37];			//软停机步�?
 		
 	if(KeyParm.SaveParms[0x38] < 10)
 		KeyParm.SaveParms[0x38] = 50;
@@ -684,7 +684,7 @@ void StateInit(void)
 	AutoRunParm.RunParm[7] = AutoRunParm.Backup7;
 	
 	
-	// **************** 变量赋初值 ************************
+	// **************** 变量赋初�?************************
 	PWMParams.StartOut = 0;
 	PwmState.StartOut = 0;
 	PwmState.UoutPhyH = 0;
@@ -835,6 +835,8 @@ void StateInit(void)
 		IEC0bits.U1TXIE = 0;			// 1 允许U2TX中断 
 		IEC0bits.U1RXIE = 0;			// 1 允许U2RX中断   
 	}
+
+	LATFbits.LATF0 = 0;
 }
 
 
@@ -871,23 +873,23 @@ void SetupPorts( void )
 
 // RB0    PGD/EMUD/AN0/CN2			PGD
 // RB1    PGC/EMUC/AN1/CN3			PGC
-// RB2    AN2/SS1/CN4     			IN1-RB2		可编程输入接口1
-// RB3    AN3/INDX/CN5				IN2-RB3 	可编程输入接口2
+// RB2    AN2/SS1/CN4     			IN1-RB2		可编程输入接�?
+// RB3    AN3/INDX/CN5				IN2-RB3 	可编程输入接�?
 
-// RB4    AN4/QEA/CN6				IN3-RB4 	可编程输入接口3  
-// RB5    AN5/QEB/CN7				IN4-RB5 	可编程输入接口4  
-// RB6    AN6/OCFA					IN5-RB6 	可编程输入接口5  
-// RB7    AN7						IN6-RB7 	可编程输入接口6  
+// RB4    AN4/QEA/CN6				IN3-RB4 	可编程输入接�?  
+// RB5    AN5/QEB/CN7				IN4-RB5 	可编程输入接�?  
+// RB6    AN6/OCFA					IN5-RB6 	可编程输入接�?  
+// RB7    AN7						IN6-RB7 	可编程输入接�?  
 
-// RB8    AN8						IN7-RB8 	可编程输入接口7  
-// RB9    AN9						IN8-RB9 	可编程输入接口8  
+// RB8    AN8						IN7-RB8 	可编程输入接�?  
+// RB9    AN9						IN8-RB9 	可编程输入接�?  
 // RB10   AN10						YF-AN10 	备用测量输入
-// RB11   AN11						PF-AN11 	主测量输入
+// RB11   AN11						PF-AN11 	主测量输�?
 
 // RB12   AN12						UF-AN12 	输入电压
-// RB13   AN13						UIF-AN13 	U相电流
-// RB14   AN14						UIF-AN14 	V相电流
-// RB15   AN15						UIF-AN15 	W相电流
+// RB13   AN13						UIF-AN13 	U相电�?
+// RB14   AN14						UIF-AN14 	V相电�?
+// RB15   AN15						UIF-AN15 	W相电�?
 
     TRISB = 0xFFFF; 
     LATB  = 0XFFFF;
@@ -897,7 +899,7 @@ void SetupPorts( void )
 //        absent
 // RC1	  T2CK						GR-RC1		过热保护
 //        absent
-// RC3	  T4CK						PLIN-RC3	旁路接触器闭合检测
+// RC3	  T4CK						PLIN-RC3	旁路接触器闭合检�?
 
 //        absent
 //        absent
@@ -910,8 +912,8 @@ void SetupPorts( void )
 //        absent
 
 //        absent
-// RC13   EMUD1/SOSCI				OU0-RD0			旁路接触器输出
-// RC14   EMUC1/SOSCO/T1CK/CN0		OU1-RD1			可编程输出1	
+// RC13   EMUD1/SOSCI				OU0-RD0			旁路接触器输�?
+// RC14   EMUC1/SOSCO/T1CK/CN0		OU1-RD1			可编程输�?	
 // RC15   OSC2/CLKO                 	OSC2		晶振
 
     TRISC = 0x1FFF;     
@@ -921,23 +923,23 @@ void SetupPorts( void )
 
 // RD0    EMUC2/OC1				OU20mA1			4-20mA输出1	
 // RD1    EMUD2/OC2				OU20mA1			4-20mA输出2	
-// RD2    OC3                   OU2-RD2			可编程输出2	
-// RD3    OC4                   OU3-RD3			可编程输出3	
+// RD2    OC3                   OU2-RD2			可编程输�?	
+// RD3    OC4                   OU3-RD3			可编程输�?	
 
-// RD4    OC5/CN13              OU4-RD4			可编程输出4	
-// RD5    OC6/CN14              OU5-RD5			可编程输出5
-// RD6    OC7/CN15              OU6-RD6			可编程输出6
-// RD7    OC8/CN16/UPDN         OU7-RD7			可编程输出7
+// RD4    OC5/CN13              OU4-RD4			可编程输�?	
+// RD5    OC6/CN14              OU5-RD5			可编程输�?
+// RD6    OC7/CN15              OU6-RD6			可编程输�?
+// RD7    OC8/CN16/UPDN         OU7-RD7			可编程输�?
 
-// RD8    IC1					UAIN-IC1		A相电压同步
-// RD9    IC2					UBIN-IC2		B相电压同步
-// RD10   IC3					UCIN-IC3		C相电压同步
-// RD11   IC4					IAIN-IC4		A相电流同步
+// RD8    IC1					UAIN-IC1		A相电压同�?
+// RD9    IC2					UBIN-IC2		B相电压同�?
+// RD10   IC3					UCIN-IC3		C相电压同�?
+// RD11   IC4					IAIN-IC4		A相电流同�?
 
 // RD12   IC5
-// RD13	  IC6					OU8-RD13		可编程输出8
-// RD14	  IC7					OU9-RD14		可编程输出9
-// RD15	  IC8					OU10-RD15		可编程输出10
+// RD13	  IC6					OU8-RD13		可编程输�?
+// RD14	  IC7					OU9-RD14		可编程输�?
+// RD15	  IC8					OU10-RD15		可编程输�?0
 
     TRISD = 0x0F00;
     LATD  = 0XFFFF;  
@@ -1000,11 +1002,11 @@ void SetupPorts( void )
 
 //        absent
 //        absent
-// RG6    SCK2/CN8					BD0-RG6		拨码开关0位
-// RG7    SDI2/CN9					BD1-RG7		拨码开关1位
+// RG6    SCK2/CN8					BD0-RG6		拨码开�?�?
+// RG7    SDI2/CN9					BD1-RG7		拨码开�?�?
 
-// RG8    SDO2/CN10					BD2-RG7		拨码开关2位
-// RG9    SS2/CN11					BD3-RG8		拨码开关3位         
+// RG8    SDO2/CN10					BD2-RG7		拨码开�?�?
+// RG9    SS2/CN11					BD3-RG8		拨码开�?�?        
 //        absent               
 //        absent
 
@@ -1022,11 +1024,11 @@ void SetupPorts( void )
 //定时器初始化
 void InitTimer( void )
 {
-//  Timer1初始化 
+//  Timer1初始�?
 
-    T1CON = 0;					// 关闭定时器1
+    T1CON = 0;					// 关闭定时�?
     TMR1 = 0;          			// clear timer1 register 
-    T1CONbits.TSIDL = 0;        // 空闲模式下停止工作   
+    T1CONbits.TSIDL = 0;        // 空闲模式下停止工�?  
     T1CONbits.TCS = 0; 			// set internal clock source
 	T1CONbits.TCKPS = 0;		// Tcy / 1 作为输入时钟  
     PR1 = dTImer1Tcy;			// set period1 register 
@@ -1035,13 +1037,13 @@ void InitTimer( void )
     IEC0bits.T1IE = 1; 			// enable interrupts 
     SRbits.IPL = 3;    			//enable CPU priority levels 4-7
 
-//Timer2初始化
+//Timer2初始�?
 
-    T2CON = 0;                   // 关闭定时器2
-    TMR2 = 0;                    // 复位定时器2计数器
-    T2CONbits.TSIDL = 0;         // 空闲模式下停止工作
-    T2CONbits.TGATE = 0;         // 禁止门控定时器累计
-    T2CONbits.TCS = 0;           // 使用Tcy 作为源时钟
+    T2CON = 0;                   // 关闭定时�?
+    TMR2 = 0;                    // 复位定时�?计数�?
+    T2CONbits.TSIDL = 0;         // 空闲模式下停止工�?
+    T2CONbits.TGATE = 0;         // 禁止门控定时器累�?
+    T2CONbits.TCS = 0;           // 使用Tcy 作为源时�?
     T2CONbits.TCKPS = 0;         // Tcy / 64 作为输入时钟
     T2CONbits.TON = 1;           // 开启timer2
     PR2 = 0x0FFF;                  // 中断周期 = 0.008 秒，预分频器分频比为64[3750suan]
@@ -1050,23 +1052,23 @@ void InitTimer( void )
     IEC0bits.T2IE = 0;           // 允许timer2 中断 
 
 
-//Timer3初始化
+//Timer3初始�?
 
-    T3CON= 0;                    // 关闭定时器3
+    T3CON= 0;                    // 关闭定时�?
     TMR3 = 0;                    // 复位定时器计3数器
-    T3CONbits.TSIDL = 0;         // 空闲模式下停止工作
-    T3CONbits.TGATE = 0;         // 禁止门控定时器累计
-    T3CONbits.TCS = 0;           // 使用Tcy 作为源时钟
+    T3CONbits.TSIDL = 0;         // 空闲模式下停止工�?
+    T3CONbits.TGATE = 0;         // 禁止门控定时器累�?
+    T3CONbits.TCS = 0;           // 使用Tcy 作为源时�?
     T3CONbits.TCKPS = 3;         // Tcy / 8 作为输入时钟
     T3CONbits.TON = 1;           // 开启timer3
     PR3 = 0x7FFF;                
     IEC0bits.T3IE = 0;           // 禁止timer3 中断
 
 
-//  Timer4初始化 
+//  Timer4初始�?
 /*
     T4CON = 0;
-    T4CONbits.TSIDL = 1;        // 空闲模式下停止工作   
+    T4CONbits.TSIDL = 1;        // 空闲模式下停止工�?  
     TMR4 = 0;          			// clear timer1 register 
     PR4 = dTImer4Tcy; 			// set period1 register 
     T4CONbits.TCS = 0; 			// set internal clock source 
@@ -1083,21 +1085,21 @@ void InitCN(void)
 {
     CNEN1 = 0;
     CNEN2 = 0;
-    CNEN1bits.CN0IE = 1; 				//开启 CN0 电平跳变引脚
-    CNEN1bits.CN1IE = 1; 				//开启 CN1 电平跳变引脚
-    CNEN1bits.CN2IE = 1; 				//开启 CN2 电平跳变引脚
-    CNEN1bits.CN3IE = 1; 				//开启 CN3 电平跳变引脚
-    CNEN1bits.CN4IE = 1; 				//开启 CN4 电平跳变引脚
-    CNEN1bits.CN5IE = 1; 				//开启 CN5 电平跳变引脚
+    CNEN1bits.CN0IE = 1; 				//开�?CN0 电平跳变引脚
+    CNEN1bits.CN1IE = 1; 				//开�?CN1 电平跳变引脚
+    CNEN1bits.CN2IE = 1; 				//开�?CN2 电平跳变引脚
+    CNEN1bits.CN3IE = 1; 				//开�?CN3 电平跳变引脚
+    CNEN1bits.CN4IE = 1; 				//开�?CN4 电平跳变引脚
+    CNEN1bits.CN5IE = 1; 				//开�?CN5 电平跳变引脚
     
     CNPU1 = 0;
     CNPU2 = 0;
-    CNPU1bits.CN0PUE = 1;				//开启 CN0 电平变化上拉
-    CNPU1bits.CN1PUE = 1;				//开启 CN1 电平变化上拉
-    CNPU1bits.CN2PUE = 1;				//开启 CN2 电平变化上拉
-    CNPU1bits.CN3PUE = 1;				//开启 CN3 电平变化上拉
-    CNPU1bits.CN4PUE = 1;				//开启 CN4 电平变化上拉
-    CNPU1bits.CN5PUE = 1;				//开启 CN5 电平变化上拉
+    CNPU1bits.CN0PUE = 1;				//开�?CN0 电平变化上拉
+    CNPU1bits.CN1PUE = 1;				//开�?CN1 电平变化上拉
+    CNPU1bits.CN2PUE = 1;				//开�?CN2 电平变化上拉
+    CNPU1bits.CN3PUE = 1;				//开�?CN3 电平变化上拉
+    CNPU1bits.CN4PUE = 1;				//开�?CN4 电平变化上拉
+    CNPU1bits.CN5PUE = 1;				//开�?CN5 电平变化上拉
     
 
     IPC3bits.CNIP = 3;              //设置中断优先级为5
@@ -1109,41 +1111,41 @@ void InitCN(void)
 
 void InitIC( void )
 {
-//	IC1初始化	
+//	IC1初始�?
     IC1CON=0;                        //禁止捕捉模块
-    IC1CONbits.ICTMR = 0;            //捕捉事件时捕捉TMR3的内容
-    IC1CONbits.ICI = 0;              //每1次捕捉事件中断一次
-    IC1CONbits.ICM = 1;              //每次下降沿捕捉事件
+    IC1CONbits.ICTMR = 0;            //捕捉事件时捕捉TMR3的内�?
+    IC1CONbits.ICI = 0;              //�?次捕捉事件中断一�?
+    IC1CONbits.ICM = 1;              //每次下降沿捕捉事�?
    
     IPC0bits.IC1IP = 6;              //设置中断优先级为5
     IFS0bits.IC1IF = 0;              //清零中断标志
     IEC0bits.IC1IE = 0;              // 1 允许IC1中断
 
-//	IC2初始化
+//	IC2初始�?
 	IC2CON=0;                        //禁止捕捉模块
-    IC2CONbits.ICTMR = 0;            //捕捉事件时捕捉TMR3的内容
-    IC2CONbits.ICI = 0;              //每1次捕捉事件中断一次
-    IC2CONbits.ICM = 1;              //每次下降沿捕捉事件
+    IC2CONbits.ICTMR = 0;            //捕捉事件时捕捉TMR3的内�?
+    IC2CONbits.ICI = 0;              //�?次捕捉事件中断一�?
+    IC2CONbits.ICM = 1;              //每次下降沿捕捉事�?
    
     IPC1bits.IC2IP = 6;              //设置中断优先级为5
     IFS0bits.IC2IF = 0;              //清零中断标志
     IEC0bits.IC2IE = 0;              // 1 允许IC2中断
     
-//	IC3初始化
+//	IC3初始�?
 	IC3CON=0;                        //禁止捕捉模块
-    IC3CONbits.ICTMR = 0;            //捕捉事件时捕捉TMR3的内容
-    IC3CONbits.ICI = 0;              //每1次捕捉事件中断一次
-    IC3CONbits.ICM = 1;              //每次下降沿捕捉事件
+    IC3CONbits.ICTMR = 0;            //捕捉事件时捕捉TMR3的内�?
+    IC3CONbits.ICI = 0;              //�?次捕捉事件中断一�?
+    IC3CONbits.ICM = 1;              //每次下降沿捕捉事�?
    
     IPC7bits.IC3IP = 6;              //设置中断优先级为5
     IFS1bits.IC3IF = 0;              //清零中断标志
     IEC1bits.IC3IE = 0;              // 1 允许IC7中断  
     
-//	IC4初始化
+//	IC4初始�?
 	IC4CON=0;                        //禁止捕捉模块
-    IC4CONbits.ICTMR = 0;            //捕捉事件时捕捉TMR3的内容
-    IC4CONbits.ICI = 0;              //每1次捕捉事件中断一次
-    IC4CONbits.ICM = 1;              //每次下降沿捕捉事件
+    IC4CONbits.ICTMR = 0;            //捕捉事件时捕捉TMR3的内�?
+    IC4CONbits.ICI = 0;              //�?次捕捉事件中断一�?
+    IC4CONbits.ICM = 1;              //每次下降沿捕捉事�?
    
     IPC7bits.IC4IP = 6;              //设置中断优先级为5
     IFS1bits.IC4IF = 0;              //清零中断标志
@@ -1152,15 +1154,15 @@ void InitIC( void )
 
 }
 
-//PWM功能初始化
+//PWM功能初始�?
 void InitPWM( void )
 {
 	                      
 	PTCON = 0x0000;    			// 禁止PWM ,自由运行模式,时基为Tcy
 	PTPER = dLoopInTcy;     	// PWM计数周期设定
     PWMCON1 = 0x0777;  			// 复位后使能PWM 1,2,3 对工作在独立模式
-    PWMCON2 = 0x0000;  			// PWM特殊事件触发器分频比为1：1，禁止改写，是能占空比更新	
-    PWMCON2bits.IUE = 0;		// PDC寄存器立即更新
+    PWMCON2 = 0x0000;  			// PWM特殊事件触发器分频比�?�?，禁止改写，是能占空比更�?
+    PWMCON2bits.IUE = 0;		// PDC寄存器立即更�?
     PWMCON2bits.OSYNC = 1;		// 改写同步
     
     PDC1 = 0x0000;     			// 初始化占空比  
@@ -1169,20 +1171,20 @@ void InitPWM( void )
     
 	DTCON1 = (dDeadTime>>1);	// 死区时基2分频时的时间
     DTCON1bits.DTAPS=1;			//死区时基2分频
-    OVDCON = 0x0000;     		//开始由PWM发生器控制
+    OVDCON = 0x0000;     		//开始由PWM发生器控�?
 
 	FLTACON = 0x0007;  			//故障引脚为低电平时，6路PWM输出无效 
     FLTACONbits.FLTAM=0;
     
 	IPC10bits.FLTAIP=7;     	//设置过流故障中断为最高优先级中断
-	IFS2bits.FLTAIF=0;      	//清FLTA故障中断标志位 （FLTA为过流故障）
+	IFS2bits.FLTAIF=0;      	//清FLTA故障中断标志�?（FLTA为过流故障）
 	IEC2bits.FLTAIE = 1;    	//使能FLTA故障中断
 
             
     SEVTCMP = 0;             	// 0 不由PWM启动AD转换
-    SEVTCMPbits.SEVTDIR = 0; 	// 0 ,特殊事件触发信号将在PWM 时基的向上计数周期产生
+    SEVTCMPbits.SEVTDIR = 0; 	// 0 ,特殊事件触发信号将在PWM 时基的向上计数周期产�?
     IPC9bits.PWMIP = 7;			// 
-    IFS2bits.PWMIF = 0;   		// 清PWM中断标志位
+    IFS2bits.PWMIF = 0;   		// 清PWM中断标志�?
     IEC2bits.PWMIE = 1;  		// 使能PWM中断
     
     
@@ -1193,24 +1195,24 @@ void InitPWM( void )
 /*
 void InitQEI( void )
 {
-    ADPCFG = 0x0030;           			// 将QEI 引脚配置为数字输入
+    ADPCFG = 0x0030;           			// 将QEI 引脚配置为数字输�?
     QEICONbits.QEIM = 0;         		// 禁止QEI 模块
     QEICONbits.CNTERR = 0;       		// 清除任何计数错误
     QEICONbits.QEISIDL = 1;      		// 休眠期间禁止工作
-    QEICONbits.SWPAB = 0;        		// QEA 和QEB 不交换
+    QEICONbits.SWPAB = 0;        		// QEA 和QEB 不交�?
     QEICONbits.PCDOUT = 0;       		// 正常I/O 引脚操作，无需方向输出
     QEICONbits.POSRES = 0;       		// 禁止索引脉冲复位
     DFLTCONbits.CEID = 1;        		// 禁止计数错误中断
     DFLTCONbits.QEOUT = 0;       		// 对于QEn 引脚，禁止数字滤波器输出
-	DFLTCONbits.QECK = 0;        		// 将QEn 的数字滤波器设置为1:1时钟分频[suan]
+	DFLTCONbits.QECK = 0;        		// 将QEn 的数字滤波器设置�?:1时钟分频[suan]
 	DFLTCONbits.INDOUT = 0;      		// 索引脉冲滤波禁止
-    POSCNT = 0;                  		// 复位位置计数器
-	MAXCNT = MotorParm.iCntsPerRev;		//2400;	//设成最大转一圈的最大脉冲
-    QEICONbits.QEIM = 7;         		// 开启QEI，X4 模式，通过与(MAXCNT)匹配复位位置计数器
+    POSCNT = 0;                  		// 复位位置计数�?
+	MAXCNT = MotorParm.iCntsPerRev;		//2400;	//设成最大转一圈的最大脉�?
+    QEICONbits.QEIM = 7;         		// 开启QEI，X4 模式，通过�?MAXCNT)匹配复位位置计数�?
 }
 */
 
-//AD转换功能初始化
+//AD转换功能初始�?
 void InitAD(void)
 {
 // 1.配置端口引脚作为模拟输入，将相应位置0
@@ -1222,13 +1224,13 @@ void InitAD(void)
     ADPCFGbits.PCFG14 = 0;   // AN7 analog
     ADPCFGbits.PCFG15 = 0;   // AN8 analog
     
-// 2.选择参考电压源 ADCON2的13——15位
+// 2.选择参考电压源 ADCON2�?3—�?5�?
     ADCON2 = 0x0000;        
-    ADCON2bits.VCFG = 1;    // 1 使用外部参考电源
+    ADCON2bits.VCFG = 1;    // 1 使用外部参考电�?
     ADCON2bits.CSCNA = 1;   // 扫描输入
     ADCON2bits.CHPS = 0;    // 转化CH0
-    ADCON2bits.SMPI = 5;    // 每6次转化完产成中断
-    ADCON2bits.ALTS = 0;    // 总是采用MUX A开关
+    ADCON2bits.SMPI = 5;    // �?次转化完产成中断
+    ADCON2bits.ALTS = 0;    // 总是采用MUX A开�?
 
 // 3.选择模拟转换时钟ADCON3
     ADCON3 =  0x0000;        //使用内部时钟 
@@ -1244,7 +1246,7 @@ void InitAD(void)
     //ADCHSbits.CH123NA = 0;               
       
     
-// 5.配置ADCSSL扫描选择寄存器 ，不扫描选0
+// 5.配置ADCSSL扫描选择寄存�?，不扫描�?
     ADCSSL = 0x0000;    
     ADCSSLbits.CSSL10 = 1;    //扫描输入2.3.6通道
     ADCSSLbits.CSSL11 = 1;
@@ -1261,15 +1263,15 @@ void InitAD(void)
     ADCON1bits.SIMSAM = 1;	// 同时采样
     
 // 7.开启A/D采样通道
-//    ADCON1bits.ADON = 1;    // 开启 AD 模块  
+//    ADCON1bits.ADON = 1;    // 开�?AD 模块  
 
 // 8.配置AD中断
     IPC2bits.ADIP = 5;   
-    IFS0bits.ADIF = 0;   //清AD中断标志位
+    IFS0bits.ADIF = 0;   //清AD中断标志�?
     IEC0bits.ADIE = 1;   //使能AD中断
 }
 
-// I2C 总线初始化
+// I2C 总线初始�?
 void InitI2C(void)
 {
 	I2CCON = 0;
@@ -1296,20 +1298,20 @@ void InitI2C(void)
 	
 }
 
-// UART2 串行通讯初始化
+// UART2 串行通讯初始�?
 void InitUART2(void)
 {	
 	U2MODE = 0;
 	U2MODEbits.UARTEN = 1;					// 使能UART
 	U2MODEbits.USIDL = 1;					// 空闲模式
-	U2MODEbits.ABAUD = 0;					// 自动波特率
+	U2MODEbits.ABAUD = 0;					// 自动波特�?
 	U2MODEbits.PDSEL = Uart2Parm.dPDSEL;		// 数据格式
 	
 	U2STA = 0;
 	U2STAbits.UTXEN = 1;
 	U2STAbits.UTXISEL = 1;
 		
-	U2BRG = Uart2Parm.dBaudRateTcy;		// 设置波特率
+	U2BRG = Uart2Parm.dBaudRateTcy;		// 设置波特�?
 	
 	IEC1bits.U2TXIE = 0;				// 1 允许U2TX中断  
 	IEC1bits.U2RXIE = 0;				// 1 允许U2RX中断  
@@ -1320,20 +1322,20 @@ void InitUART2(void)
 	
 }
 
-// UART1 串行通讯初始化
+// UART1 串行通讯初始�?
 void InitUART1(void)
 {	
 	U1MODE = 0;
 	U1MODEbits.UARTEN = 1;					// 使能UART
 	U1MODEbits.USIDL = 1;					// 空闲模式
-	U1MODEbits.ABAUD = 0;					// 自动波特率
+	U1MODEbits.ABAUD = 0;					// 自动波特�?
 	U1MODEbits.PDSEL = Uart1Parm.dPDSEL;		// 数据格式
 	
 	U1STA = 0;
 	U1STAbits.UTXEN = 1;
 	U1STAbits.UTXISEL = 1;
 		
-	U1BRG = Uart1Parm.dBaudRateTcy;		// 设置波特率
+	U1BRG = Uart1Parm.dBaudRateTcy;		// 设置波特�?
 	
 	IEC0bits.U1TXIE = 0;				// 1 允许U2TX中断  
 	IEC0bits.U1RXIE = 0;				// 1 允许U2RX中断  
@@ -1344,7 +1346,7 @@ void InitUART1(void)
 	
 }
 
-//输出比较初始化
+//输出比较初始�?
 void InitOC(void)
 {	
 	OC1CON = 0;

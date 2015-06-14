@@ -10,6 +10,7 @@ extern void modbus_receive(unsigned char c);
 extern void modbus_slave(void);
 extern char modbus_send();
 extern char modbus_is_send_done(void);
+extern void modbus_send_done(void);
 void UartCRC(unsigned int DataCRC);
 
 unsigned int AX_int_Uart = 0, BX_int_Uart = 0;
@@ -115,8 +116,11 @@ void __attribute__((__interrupt__)) _U2RXInterrupt (void)
 
 void __attribute__((__interrupt__)) _U2TXInterrupt (void)
 {
-	if (!modbus_is_send_done())
+	if (!modbus_is_send_done()) {
 		U2TXREG = modbus_send();
+	} else {
+		modbus_send_done();
+	}
 /*
 	if(Uart2Parm.TxTimes == 0)
 	{
@@ -157,7 +161,7 @@ void Uart2Tx(void)
 {
 	modbus_slave();
 	//判断系统是否处于等待UART发送结束的状�?
-	if(MainState.UartTxOff == 1)	
+/*	if(MainState.UartTxOff == 1)	
 	{
 		//检查UART2发送结束标志是否置1
 		if(U2STAbits.TRMT == 1)		
@@ -198,6 +202,7 @@ void Uart2Tx(void)
 			}
 		}
 	}
+//*/
 	//检查是否需要发送响应数�?
 /*	if(MainState.UartRx == 1)
 	{
@@ -610,7 +615,31 @@ void UartCRC(unsigned int DataCRC)
 	}
 }
 
-void Uart2TxStart(unsigned char c)
+void Uart2TxSend(unsigned char c)
 {
 	U2TXREG = c;
+}
+
+void Uart2TxEn(void)
+{
+	LATFbits.LATF0 = 1;
+}
+
+void Uart2TxDis(void)
+{
+	LATFbits.LATF0 = 0;
+}
+
+ 
+void Uart2TxBuf(unsigned char *buf, int len)
+{
+	int i = 100;
+
+	LATFbits.LATF0 = 1;
+	while(i--);
+	for (i = 0; i < len; ++i) {
+		U2TXREG = *buf++;
+		while(!U2STAbits.TRMT);
+	}
+	LATFbits.LATF0 = 0;
 }
