@@ -213,9 +213,9 @@ void modbus_read_registers(void)
 					mb.request.data.read_single.address, 
 					mb.request.data.read_single.count);	
 	
-	crc = CRC16(&mb.response.data[0], cnt + 3);	
-	mb.response.data[cnt + 3] = crc & 0x00FF;
-	mb.response.data[cnt + 4] = (crc & 0xFF00) >> 8;
+	crc = CRC16(&mb.response.data[0], cnt + 3);
+	mb.response.data[cnt + 3] = (crc & 0xFF00) >> 8;
+	mb.response.data[cnt + 4] = crc & 0x00FF;
 
 	mb.response.length = cnt + 5;
 }
