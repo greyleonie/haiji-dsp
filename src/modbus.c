@@ -13,14 +13,13 @@ extern void modbus_map_init(void);
 extern unsigned short modbus_rd_reg(int addr);
 extern void modbus_wr_reg(int addr, unsigned short val);
 extern void modbus_rd_regs(unsigned char *dst, int start_addr, int cnt);
-extern void modbus_wr_regs(unsigned short *src, int start_addr, int cnt);
+extern void modbus_wr_regs(unsigned char *src, int start_addr, int cnt);
  
 modbus mb;
 
 
 int modbus_init(unsigned char adr)
 {
-	//Uart2TxBuf((unsigned char *)"hello", 5);
 	modbus_map_init();
 	if (adr >= 1 && adr <= MODBUS_MAX_NODE_ADDRESS) {
 		mb.adr = adr;
@@ -220,14 +219,24 @@ void modbus_read_registers(void)
 	mb.response.length = cnt + 5;
 }
 
+void modbus_write_registers(void)
+{
+	// write KeyParm
+	//Uart2Parm.KeyParamAddr = Uart2Parm.RxCurData;
+	//KeyParm.SaveParms[Uart2Parm.KeyParamAddr] = Uart2Parm.KeyParamDataL;
+
+	// write EEPROM
+	//EEPROMADDR = 0xF000 + 2 * Uart2Parm.KeyParamAddr;
+    //EraseEE(__builtin_tblpage(&EPConfigS[0]),EEPROMADDR, WORD);
+    //WriteEE(&KeyParm.SaveParms[Uart2Parm.KeyParamAddr],__builtin_tblpage(&EPConfigS[0]),EEPROMADDR, WORD);
+}
 
 
 char modbus_send(void)
 {
 	char c = mb.response.data[mb.send_cnt];
 	mb.send_cnt++;
-	//if (mb.send_cnt == mb.response.length)
-	//	mb.state = MODBUS_ST_SEND_DONE;
+
 	return c;
 }
 
@@ -244,6 +253,12 @@ void modbus_slave(void)
 					case MODBUS_FC_READ_INPUT_REGISTERS:
 						Uart2TxEn();
 						modbus_read_registers();
+						break;
+
+					case MODBUS_FC_WRITE_SINGLE_REGISTER:
+					case MODBUS_FC_WRITE_MULTIPLE_REGISTERS:
+						Uart2TxEn();
+						modbus_write_registers();
 						break;
 
 					default:
@@ -271,8 +286,6 @@ void modbus_slave(void)
 		case MODBUS_ST_SEND_RESPONSE:
 		case MODBUS_ST_SEND_EXCEPTION:
 			//wait send done
-			//Uart2TxBuf(mb.response.data, mb.response.length);
-			//mb.state = MODBUS_ST_SEND_DONE;
 			break;
 		
 		case MODBUS_ST_SEND_DONE:

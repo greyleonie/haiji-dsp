@@ -9,7 +9,7 @@ void timer4_init(void)
  	T4CON = 0;
     T4CONbits.TSIDL = 1;        // 空闲模式下停止工�?  
     TMR4 = 0;          			// clear timer1 register 
-    PR4 = (dFcy * 3.5 * 10) / 9600; 			// set period1 register 
+    PR4 = ((dFcy * 3.5 * 10) / Uart2Parm.dBaudRate); 	// set period1 register 
     T4CONbits.TCS = 0; 			// set internal clock source 
     IPC5bits.T4IP = 5; 			// set priority level 
     IFS1bits.T4IF = 0; 			//clear interrupt flag 

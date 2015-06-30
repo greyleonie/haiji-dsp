@@ -137,11 +137,15 @@ void modbus_rd_regs(unsigned char *dst, int start_addr, int cnt)
 	}
 }
 
-void modbus_wr_regs(unsigned short *src, int start_addr, int cnt)
+void modbus_wr_regs(unsigned char *src, int start_addr, int cnt)
 {
-	int i;
+	int i, j = 0;
+	unsigned short val;
+
 	for (i = 0; i < cnt; ++i) {
-		modbus_wr_reg(start_addr + i, src[i]);
+		((unsigned char *)&val)[0] = src[j++];
+		((unsigned char *)&val)[1] = src[j++];
+		modbus_wr_reg(start_addr + i, val);
 	}
 }
 
