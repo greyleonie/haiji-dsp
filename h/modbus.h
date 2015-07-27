@@ -155,6 +155,7 @@ typedef struct _modbus {
 	unsigned short send_cnt;
 
 	unsigned short crc;
+	unsigned char exception;
 
 } modbus;
 

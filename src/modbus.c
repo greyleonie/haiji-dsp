@@ -12,10 +12,10 @@ extern void CRC16_for_char(unsigned short *crc, unsigned char c);
 extern unsigned short CRC16(unsigned char *p, unsigned short len);
 extern void modbus_map_init(void);
 extern unsigned short modbus_rd_reg(int addr);
-extern void modbus_wr_reg(int addr, unsigned short val);
+extern int modbus_wr_reg(int addr, unsigned short val);
 extern void modbus_rd_regs(unsigned char *dst, int start_addr, int cnt);
 extern void modbus_wr_regs(unsigned char *src, int start_addr, int cnt);
- 
+extern int is_register_addr_valid(int start_addr, int cnt);
 modbus mb;
 
 
@@ -40,26 +40,21 @@ void modbus_receive(unsigned char c)
 				mb.request.adr = c;
 				mb.state = MODBUS_ST_RECV_FUNCTION;
 				mb.crc = 0xFFFF;
+				//mb.exception = MODBUS_EXCEPTION_MAX;
 				CRC16_for_char(&mb.crc, c);
 			}
 			break;
 
 		case MODBUS_ST_RECV_FUNCTION:
-			if (c == MODBUS_FC_READ_COILS
-			|| c == MODBUS_FC_READ_DISCRETE_INPUTS
-			|| c == MODBUS_FC_READ_HOLDING_REGISTERS
-			|| c == MODBUS_FC_READ_INPUT_REGISTERS
-			|| c == MODBUS_FC_WRITE_SINGLE_COIL
-			|| c == MODBUS_FC_WRITE_SINGLE_REGISTER
-			|| c == MODBUS_FC_WRITE_MULTIPLE_COILS
-			|| c == MODBUS_FC_WRITE_MULTIPLE_REGISTERS
-			|| c == MODBUS_FC_WRITE_AND_READ_REGISTERS) {
-				mb.request.function = c;
+			mb.request.function = c;
+			if (c == MODBUS_FC_READ_HOLDING_REGISTERS
+				|| c == MODBUS_FC_WRITE_SINGLE_REGISTER) {
 				mb.recv_cnt = 0;
 				mb.state = MODBUS_ST_RECV_DATA;
 				CRC16_for_char(&mb.crc, c);
 			} else {
 				//start timer 
+				mb.exception = MODBUS_EXCEPTION_ILLEGAL_FUNCTION;
 				mb.state = MODBUS_ST_EXCEPTION;
 			}
 			break;
@@ -199,15 +194,43 @@ void modbus_receive(unsigned char c)
 	}// end switch
 }
 
+void modbus_exception(unsigned char exception_code)
+{
+	unsigned short crc;
+
+	mb.response.data[0] = mb.adr;
+	mb.response.data[1] = (mb.request.function | 0x80);
+	mb.response.data[2] = exception_code;
+	crc = CRC16(&mb.response.data[0], 3);
+	mb.response.data[3] = ((unsigned char *)&crc)[HIGH];
+	mb.response.data[4] = ((unsigned char *)&crc)[LOW];
+	mb.response.length = 5;
+}
 
 void modbus_read_holding_registers(void)
 {
 	unsigned short crc;
-	unsigned char cnt = (mb.request.data.read_single.count << 1) & 0x00FF;
+	unsigned char cnt;
 
+	// check read registers count
+	if (mb.request.data.read_single.count < 1
+		|| mb.request.data.read_single.count > MODBUS_MAX_READ_REGISTERS) {
+		modbus_exception(MODBUS_EXCEPTION_ILLEGAL_DATA_VALUE);
+		return;
+	}
+
+	// check read registers address and offest
+	if (!is_register_addr_valid(mb.request.data.read_single.address,
+								mb.request.data.read_single.count)) {
+		modbus_exception(MODBUS_EXCEPTION_ILLEGAL_DATA_ADDRESS);
+		return;
+	}
+
+	// read registers, and create response packet
 	mb.response.data[0] = mb.adr;
 	mb.response.data[1] = mb.request.function;
 
+	cnt = (mb.request.data.read_single.count << 1) & 0x00FF;
 	mb.response.data[2] = cnt;
 	modbus_rd_regs(&mb.response.data[3], 
 					mb.request.data.read_single.address, 
@@ -225,47 +248,39 @@ void modbus_write_single_register(void)
 	unsigned short crc;
 	unsigned short value;
 
-	if (mb.request.data.write_single.address < 128) {
-		// write KeyParm
-		Uart2Parm.KeyParamAddr = mb.request.data.write_single.address;
-		KeyParm.SaveParms[Uart2Parm.KeyParamAddr] = mb.request.data.write_single.value;
-
-		// write EEPROM
-		EEPROMADDR = 0xF000 + 2 * Uart2Parm.KeyParamAddr;
-	    EraseEE(__builtin_tblpage(&EPConfigS[0]),EEPROMADDR, 1);
-	    WriteEE(&KeyParm.SaveParms[Uart2Parm.KeyParamAddr],__builtin_tblpage(&EPConfigS[0]),EEPROMADDR, 1);
-		ReadEE(__builtin_tblpage(&EPConfigS[0]), EEPROMADDR, (int *)&value, 1);
-		if (value == mb.request.data.write_single.value) {
-			// create response packet
-			mb.response.data[0] = mb.adr;
-			mb.response.data[1] = mb.request.function;
-			mb.response.data[2] = ((unsigned char *)&mb.request.data.write_single.address)[HIGH];
-			mb.response.data[3] = ((unsigned char *)&mb.request.data.write_single.address)[LOW];
-			mb.response.data[4] = ((unsigned char *)&value)[HIGH];
-			mb.response.data[5] = ((unsigned char *)&value)[LOW];
-			crc = CRC16(&mb.response.data[0], 6);
-			mb.response.data[6] = ((unsigned char *)&crc)[HIGH];
-			mb.response.data[7] = ((unsigned char *)&crc)[LOW];
-			mb.response.length = 8;
-		} else {
-			// write data error
-			mb.response.data[0] = mb.adr;
-			mb.response.data[1] = (MODBUS_EXCEPTION_SLAVE_OR_SERVER_FAILURE | 0x80); // data error
-			crc = CRC16(&mb.response.data[0], 2);
-			mb.response.data[2] = ((unsigned char *)&crc)[HIGH];
-			mb.response.data[3] = ((unsigned char *)&crc)[LOW];
-			mb.response.length = 4;
-		}
-	} else { //if (mb.request.data.write_single.address < 128)
-		// address invalid
-		mb.response.data[0] = mb.adr;
-		mb.response.data[1] = (MODBUS_EXCEPTION_ILLEGAL_DATA_ADDRESS | 0x80); // invalid address
-		crc = CRC16(&mb.response.data[0], 2);
-		mb.response.data[2] = ((unsigned char *)&crc)[HIGH];
-		mb.response.data[3] = ((unsigned char *)&crc)[LOW];
-		mb.response.length = 4;
+	// write register
+	if (!modbus_wr_reg(mb.request.data.write_single.address,
+					mb.request.data.write_single.value)) {
+		modbus_exception(MODBUS_EXCEPTION_ILLEGAL_DATA_ADDRESS);
+		return;
 	}
+
+	// write EEPROM
+	if (mb.request.data.write_single.address >= 0x0010) {
+		EEPROMADDR = 0xF000 + 2 * (mb.request.data.write_single.address - 0x0010);
+	    EraseEE(__builtin_tblpage(&EPConfigS[0]), EEPROMADDR, 1);
+	    WriteEE(&mb.request.data.write_single.value, __builtin_tblpage(&EPConfigS[0]), EEPROMADDR, 1);
+		ReadEE(__builtin_tblpage(&EPConfigS[0]), EEPROMADDR, (int *)&value, 1);
+		if (value != mb.request.data.write_single.value) {
+			modbus_exception(MODBUS_EXCEPTION_SLAVE_OR_SERVER_FAILURE);
+		 	return;
+		}
+	} // if (mb.request.data.write_single.address >= 0x0010)
+
+	// create response packet
+	mb.response.data[0] = mb.adr;
+	mb.response.data[1] = mb.request.function;
+	mb.response.data[2] = ((unsigned char *)&mb.request.data.write_single.address)[HIGH];
+	mb.response.data[3] = ((unsigned char *)&mb.request.data.write_single.address)[LOW];
+	mb.response.data[4] = ((unsigned char *)&value)[HIGH];
+	mb.response.data[5] = ((unsigned char *)&value)[LOW];
+	crc = CRC16(&mb.response.data[0], 6);
+	mb.response.data[6] = ((unsigned char *)&crc)[HIGH];
+	mb.response.data[7] = ((unsigned char *)&crc)[LOW];
+	mb.response.length = 8;
 }
+
+
 
 
 char modbus_send(void)
@@ -295,9 +310,6 @@ void modbus_slave(void)
 						modbus_write_single_register();
 						break;
 
-					case MODBUS_FC_WRITE_MULTIPLE_REGISTERS:
-						break;
-
 					default:
 						break;
 
@@ -317,7 +329,13 @@ void modbus_slave(void)
 			break;
 
 		case MODBUS_ST_MAKE_EXCEPTION:
-			mb.state = MODBUS_ST_SEND_EXCEPTION;
+			if (mb.exception < MODBUS_EXCEPTION_MAX) {
+				Uart2TxEn();
+				modbus_exception(mb.exception);
+				mb.send_cnt = 0;
+				Uart2TxSend(modbus_send());
+				mb.state = MODBUS_ST_SEND_EXCEPTION;
+			}
 			break;
 
 		case MODBUS_ST_SEND_RESPONSE:

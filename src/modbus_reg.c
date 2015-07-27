@@ -1,19 +1,29 @@
 #include "variable.h"
 
 /* define modbus register address map */
-typedef struct _modbus_register{
-	int	addr;
-	void *reg;
-} modbus_register;
+#define MAX_REGISTERS			256
+#define REGISTERS_BASE_ADDRESS 	0x0000
+#define REGISTERS_SIZE			144
 
-modbus_register mb_reg[256];
+typedef struct _register_map {
+	struct _register {
+		int	addr;
+		void *reg;
+	} reg[MAX_REGISTERS];
 
-#define MODBUS_MAP_SET(X,Y) mb_reg[index].addr=(X);\
-							mb_reg[index++].reg=&(Y)
+	int cnt;
+} register_map;
+
+register_map reg_map;
+
+#define MODBUS_MAP_SET(X,Y) reg_map.reg[index].addr=(X);\
+							reg_map.reg[index++].reg=&(Y);\
+							reg_map.cnt++
 
 void modbus_map_init(void)
 {
 	int index = 0;
+	reg_map.cnt = 0;
 
 	MODBUS_MAP_SET(0x0001,MeauParm.MainMeau);
 	MODBUS_MAP_SET(0x0002,MeauParm.BackupMeau);
@@ -28,7 +38,7 @@ void modbus_map_init(void)
 	for (i = 0; i < 128; ++i) {
 		MODBUS_MAP_SET((0x0010 + i),(KeyParm.SaveParms[i]));
 	}
-
+/*
 	MODBUS_MAP_SET(0x0101,Uart1Parm.MainData[0]);
 	MODBUS_MAP_SET(0x0102,Uart1Parm.BackupData[0]);
 	MODBUS_MAP_SET(0x0103,CurParms.IU);
@@ -100,29 +110,34 @@ void modbus_map_init(void)
 	MODBUS_MAP_SET(0x0806,VolParms.Uin);
 	MODBUS_MAP_SET(0x0807,Uart1Parm.ErrorData[7]);
 	MODBUS_MAP_SET(0x0808,Uart1Parm.ErrorData[7]);
+//*/
 }
 
 unsigned short modbus_rd_reg(int addr)
 {
 	int i;
 	for (i = 0; i < 200; ++i) {
-		if (mb_reg[i].addr == addr) {
-			return *(unsigned short *)(mb_reg[i].reg);
+		if (reg_map.reg[i].addr == addr) {
+			return *(unsigned short *)(reg_map.reg[i].reg);
 		}
 	}//end for
 	return 0xFFFF;
 }
 
 
-void modbus_wr_reg(int addr, unsigned short val)
+int modbus_wr_reg(int addr, unsigned short val)
 {
 	int i;
 	for (i = 0; i < 200; ++i) {
-		if (mb_reg[i].addr == addr) {
-			*(unsigned short *)(mb_reg[i].reg) = val;
+		if (reg_map.reg[i].addr == addr) {
+			*(unsigned short *)(reg_map.reg[i].reg) = val;
 			break;
 		}
 	}//end for
+	if (i == 200)
+		return 0;
+	else
+		return 1;
 }
 
 void modbus_rd_regs(unsigned char *dst, int start_addr, int cnt)
@@ -132,8 +147,8 @@ void modbus_rd_regs(unsigned char *dst, int start_addr, int cnt)
 
 	for (i = 0; i < cnt; ++i) {
 		val = modbus_rd_reg(start_addr + i);
-		dst[j++] = val & 0x00FF;
-		dst[j++] = (val & 0xFF00) >> 8;
+		dst[j++] = ((unsigned char *)&val)[1];
+		dst[j++] = ((unsigned char *)&val)[0];
 	}
 }
 
@@ -143,10 +158,18 @@ void modbus_wr_regs(unsigned char *src, int start_addr, int cnt)
 	unsigned short val;
 
 	for (i = 0; i < cnt; ++i) {
-		((unsigned char *)&val)[0] = src[j++];
 		((unsigned char *)&val)[1] = src[j++];
+		((unsigned char *)&val)[0] = src[j++];
 		modbus_wr_reg(start_addr + i, val);
 	}
 }
 
+int is_register_addr_valid(int start_addr, int cnt)
+{
+	if (start_addr >= REGISTERS_BASE_ADDRESS
+		&& (start_addr + cnt) < (REGISTERS_BASE_ADDRESS + REGISTERS_SIZE))
+		return 1;
+	else
+		return 0;
+}
 
