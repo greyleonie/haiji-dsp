@@ -106,7 +106,7 @@ int main(void)
 //读EEPROM并设置程序初始参数值，启动初始功能单元
     StateInit();
     timer4_init(); 
-	modbus_init(0x01);
+	modbus_init(MODBUS_SLAVE_ADR);
     
 	while(1)//主循�?
     {

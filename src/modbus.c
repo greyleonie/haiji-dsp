@@ -5,19 +5,16 @@
 extern void Uart2TxSend(unsigned char c);
 extern void Uart2TxEn(void);
 extern void Uart2TxDis(void);
-extern void Uart2TxBuf(unsigned char *buf, int len);
 extern void timer4_reset(void);
 extern void timer4_stop(void);
 extern void CRC16_for_char(unsigned short *crc, unsigned char c);
 extern unsigned short CRC16(unsigned char *p, unsigned short len);
 extern void modbus_map_init(void);
-extern unsigned short modbus_rd_reg(int addr);
 extern int modbus_wr_reg(int addr, unsigned short val);
 extern void modbus_rd_regs(unsigned char *dst, int start_addr, int cnt);
-extern void modbus_wr_regs(unsigned char *src, int start_addr, int cnt);
 extern int is_register_addr_valid(int start_addr, int cnt);
-modbus mb;
 
+modbus mb;
 
 int modbus_init(unsigned char adr)
 {
@@ -40,21 +37,25 @@ void modbus_receive(unsigned char c)
 				mb.request.adr = c;
 				mb.state = MODBUS_ST_RECV_FUNCTION;
 				mb.crc = 0xFFFF;
-				//mb.exception = MODBUS_EXCEPTION_MAX;
 				CRC16_for_char(&mb.crc, c);
 			}
 			break;
 
 		case MODBUS_ST_RECV_FUNCTION:
-			mb.request.function = c;
-			if (c == MODBUS_FC_READ_HOLDING_REGISTERS
-				|| c == MODBUS_FC_WRITE_SINGLE_REGISTER) {
+			if (c == MODBUS_FC_READ_COILS
+				|| c == MODBUS_FC_READ_DISCRETE_INPUTS
+				|| c == MODBUS_FC_READ_HOLDING_REGISTERS
+				|| c == MODBUS_FC_READ_INPUT_REGISTERS
+				|| c == MODBUS_FC_WRITE_SINGLE_COIL
+				|| c == MODBUS_FC_WRITE_SINGLE_REGISTER
+				|| c == MODBUS_FC_WRITE_MULTIPLE_COILS
+				|| c == MODBUS_FC_WRITE_MULTIPLE_REGISTERS
+				|| c == MODBUS_FC_WRITE_AND_READ_REGISTERS) {
+				mb.request.function = c;
 				mb.recv_cnt = 0;
 				mb.state = MODBUS_ST_RECV_DATA;
 				CRC16_for_char(&mb.crc, c);
 			} else {
-				//start timer 
-				mb.exception = MODBUS_EXCEPTION_ILLEGAL_FUNCTION;
 				mb.state = MODBUS_ST_EXCEPTION;
 			}
 			break;
@@ -197,6 +198,7 @@ void modbus_receive(unsigned char c)
 void modbus_exception(unsigned char exception_code)
 {
 	unsigned short crc;
+	int i;
 
 	mb.response.data[0] = mb.adr;
 	mb.response.data[1] = (mb.request.function | 0x80);
@@ -205,6 +207,8 @@ void modbus_exception(unsigned char exception_code)
 	mb.response.data[3] = ((unsigned char *)&crc)[HIGH];
 	mb.response.data[4] = ((unsigned char *)&crc)[LOW];
 	mb.response.length = 5;
+
+	for (i = 0; i < 16; ++i);	//fix it, waiting for Uart TX flag
 }
 
 void modbus_read_holding_registers(void)
@@ -280,9 +284,6 @@ void modbus_write_single_register(void)
 	mb.response.length = 8;
 }
 
-
-
-
 char modbus_send(void)
 {
 	char c = mb.response.data[mb.send_cnt];
@@ -291,7 +292,6 @@ char modbus_send(void)
 	return c;
 }
 
-
 void modbus_slave(void)
 {
 	switch (mb.state) {
@@ -299,29 +299,27 @@ void modbus_slave(void)
 			//check request
 			if (mb.crc == mb.request.crc) {
 				// make response packet
+				Uart2TxEn();	//fix it
 				switch (mb.request.function) {
 					case MODBUS_FC_READ_HOLDING_REGISTERS:
-						Uart2TxEn();
 						modbus_read_holding_registers();
 						break;
 
 					case MODBUS_FC_WRITE_SINGLE_REGISTER:
-						Uart2TxEn();
 						modbus_write_single_register();
 						break;
 
 					default:
+						modbus_exception(MODBUS_EXCEPTION_ILLEGAL_FUNCTION);
 						break;
 
-				}// end switch (mb.mb.request.function) 
-
+				}// end switch (mb.mb.request.function)
 				mb.send_cnt = 0;
 				Uart2TxSend(modbus_send());
 				mb.state = MODBUS_ST_SEND_RESPONSE;
 			} else {
 				mb.state = MODBUS_ST_RECV_IDLE;
 			}
-			
 			break;
 
 		case MODBUS_ST_EXCEPTION:
@@ -329,13 +327,6 @@ void modbus_slave(void)
 			break;
 
 		case MODBUS_ST_MAKE_EXCEPTION:
-			if (mb.exception < MODBUS_EXCEPTION_MAX) {
-				Uart2TxEn();
-				modbus_exception(mb.exception);
-				mb.send_cnt = 0;
-				Uart2TxSend(modbus_send());
-				mb.state = MODBUS_ST_SEND_EXCEPTION;
-			}
 			break;
 
 		case MODBUS_ST_SEND_RESPONSE:

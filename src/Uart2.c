@@ -598,7 +598,7 @@ void Uart2Tx(void)
 			
 //*/				
 }
-
+/*
 void UartCRC(unsigned int DataCRC)
 {
 	Uart2Parm.UartCRC = Uart2Parm.UartCRC ^ DataCRC;
@@ -614,7 +614,7 @@ void UartCRC(unsigned int DataCRC)
 		}
 	}
 }
-
+//*/
 void Uart2TxSend(unsigned char c)
 {
 	U2TXREG = c;
@@ -630,16 +630,3 @@ void Uart2TxDis(void)
 	LATFbits.LATF0 = 0;
 }
 
- 
-void Uart2TxBuf(unsigned char *buf, int len)
-{
-	int i = 100;
-
-	LATFbits.LATF0 = 1;
-	while(i--);
-	for (i = 0; i < len; ++i) {
-		U2TXREG = *buf++;
-		while(!U2STAbits.TRMT);
-	}
-	LATFbits.LATF0 = 0;
-}

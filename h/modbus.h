@@ -1,7 +1,6 @@
 #ifndef MODBUS_H
 #define MODBUS_H
 
-
 /* Modbus function codes */
 #define MODBUS_FC_READ_COILS                0x01
 #define MODBUS_FC_READ_DISCRETE_INPUTS      0x02
@@ -155,7 +154,6 @@ typedef struct _modbus {
 	unsigned short send_cnt;
 
 	unsigned short crc;
-	unsigned char exception;
 
 } modbus;
 
