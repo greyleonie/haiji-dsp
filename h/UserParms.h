@@ -73,9 +73,6 @@
 #define		VerGTO				2000	// 2000A
 #define		VerDe				5		// 
 
-// define modbus parameter
-#define MODBUS_SLAVE_ADR	0x01
-
 #endif
 
 
